@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Hero = () => {
   return (
@@ -29,13 +30,17 @@ const Hero = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
-            <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground group">
-              I'm a Dentist
-              <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-            </Button>
-            <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary/5">
-              I'm a Laboratory
-            </Button>
+            <Link to="/dashboard">
+              <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground group">
+                I'm a Dentist
+                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </Link>
+            <Link to="/marketplace">
+              <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary/5">
+                I'm a Laboratory
+              </Button>
+            </Link>
           </div>
 
           <div className="flex flex-wrap gap-6 justify-center pt-8 text-sm">
