@@ -30,13 +30,13 @@ const Hero = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
-            <Link to="/dashboard">
+            <Link to="/auth">
               <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground group">
                 I'm a Dentist
                 <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
-            <Link to="/marketplace">
+            <Link to="/auth">
               <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary/5">
                 I'm a Laboratory
               </Button>

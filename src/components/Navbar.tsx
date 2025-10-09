@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
@@ -30,12 +31,16 @@ const Navbar = () => {
         </div>
 
         <div className="hidden md:flex items-center gap-3">
-          <Button variant="ghost" size="sm">
-            Sign In
-          </Button>
-          <Button size="sm" className="bg-primary hover:bg-primary/90">
-            Get Started
-          </Button>
+          <Link to="/auth">
+            <Button variant="ghost" size="sm">
+              Sign In
+            </Button>
+          </Link>
+          <Link to="/auth">
+            <Button size="sm" className="bg-primary hover:bg-primary/90">
+              Get Started
+            </Button>
+          </Link>
         </div>
 
         <Button variant="ghost" size="icon" className="md:hidden">
