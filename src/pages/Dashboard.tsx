@@ -2,6 +2,8 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Plus, Clock, CheckCircle2, AlertCircle, Package, TrendingUp } from "lucide-react";
 import { Link } from "react-router-dom";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/AppSidebar";
 
 const Dashboard = () => {
   const activeCases = [
@@ -18,25 +20,21 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Navbar */}
-      <nav className="border-b border-border bg-card">
-        <div className="container mx-auto px-6 h-16 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="flex items-center gap-1">
-              <div className="w-2 h-2 rounded-full bg-primary"></div>
-              <div className="w-2 h-2 rounded-full bg-secondary"></div>
-              <div className="w-2 h-2 rounded-full bg-primary"></div>
+    <SidebarProvider>
+      <div className="min-h-screen flex w-full bg-background">
+        <AppSidebar />
+
+        <main className="flex-1">
+          {/* Top Bar */}
+          <div className="h-16 border-b border-border bg-card flex items-center justify-between px-6">
+            <div className="flex items-center gap-4">
+              <SidebarTrigger />
+              <h1 className="text-xl font-bold text-foreground">Dashboard</h1>
             </div>
-            <span className="text-xl font-bold text-foreground">DENTALEEM</span>
-          </Link>
-          <div className="flex items-center gap-6">
-            <Link to="/dashboard" className="text-sm font-medium text-foreground">Dashboard</Link>
-            <Link to="/marketplace" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Marketplace</Link>
-            <Button variant="ghost" size="sm">Dr. Sarah Ahmad</Button>
+            <Link to="/create-case">
+              <Button>Create New Case</Button>
+            </Link>
           </div>
-        </div>
-      </nav>
 
       <div className="container mx-auto px-6 py-8">
         {/* Header */}
@@ -124,8 +122,10 @@ const Dashboard = () => {
             ))}
           </div>
         </Card>
-      </div>
+        </div>
+      </main>
     </div>
+    </SidebarProvider>
   );
 };
 

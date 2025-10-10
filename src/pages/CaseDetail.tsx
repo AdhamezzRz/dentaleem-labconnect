@@ -139,9 +139,12 @@ const CaseDetail = () => {
             <h1 className="text-3xl font-bold text-foreground mb-2">
               Case Details
             </h1>
-            <p className="text-muted-foreground">
-              Patient: {caseData?.patient_initials}
-            </p>
+            <div className="flex items-center gap-3">
+              <p className="text-muted-foreground">
+                Patient: {caseData?.patient_initials}
+              </p>
+              <Badge variant="outline">Adult</Badge>
+            </div>
           </div>
           <Badge className={getStatusColor(caseData?.status)}>
             {caseData?.status?.replace("_", " ").toUpperCase()}
