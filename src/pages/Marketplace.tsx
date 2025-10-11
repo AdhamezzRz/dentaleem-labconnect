@@ -172,12 +172,20 @@ const Marketplace = () => {
             >
               <div className="flex flex-col lg:flex-row gap-6">
                 {/* Lab Logo/Avatar */}
-                <div className="flex-shrink-0">
+                <div className="flex-shrink-0 relative">
                   <div className="w-24 h-24 rounded-xl bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center">
                     <span className="text-2xl font-bold text-white">
                       {lab.name.split(' ').map(w => w[0]).join('').slice(0, 2)}
                     </span>
                   </div>
+                  {lab.verified && (
+                    <div 
+                      className="absolute -top-2 -right-2 bg-secondary text-white text-xs px-2 py-1 rounded-full font-medium shadow-md"
+                      title="This lab is certified and approved for international case handling"
+                    >
+                      Verified
+                    </div>
+                  )}
                 </div>
 
                 {/* Lab Info */}

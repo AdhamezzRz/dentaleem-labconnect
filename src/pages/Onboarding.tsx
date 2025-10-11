@@ -1,20 +1,56 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, X } from "lucide-react";
+
+const specialtiesList = [
+  "Prosthodontics",
+  "Orthodontics",
+  "Endodontics",
+  "Implantology",
+  "Cosmetic Dentistry",
+  "Oral Surgery",
+  "Pediatric Dentistry",
+  "Periodontics",
+];
+
+const materialsList = [
+  "Zirconia",
+  "Emax",
+  "PMMA",
+  "Composite",
+  "Acrylic",
+  "Metal-Ceramic",
+  "Hybrid",
+  "3D Printed Resin",
+];
 
 const Onboarding = () => {
   const [step, setStep] = useState(1);
-  const [specialty, setSpecialty] = useState("");
-  const [preferredMaterials, setPreferredMaterials] = useState("");
+  const [selectedSpecialties, setSelectedSpecialties] = useState<string[]>([]);
+  const [selectedMaterials, setSelectedMaterials] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  const toggleSpecialty = (specialty: string) => {
+    setSelectedSpecialties(prev => 
+      prev.includes(specialty) 
+        ? prev.filter(s => s !== specialty)
+        : [...prev, specialty]
+    );
+  };
+
+  const toggleMaterial = (material: string) => {
+    setSelectedMaterials(prev => 
+      prev.includes(material) 
+        ? prev.filter(m => m !== material)
+        : [...prev, material]
+    );
+  };
 
   const handleComplete = async () => {
     setLoading(true);
@@ -22,13 +58,11 @@ const Onboarding = () => {
       const { data: { user } } = await supabase.auth.getUser();
       
       if (user) {
-        const materials = preferredMaterials.split(",").map((m) => m.trim());
-        
         await supabase
           .from("profiles")
           .update({
-            specialty,
-            preferred_materials: materials,
+            specialty: selectedSpecialties.join(", "),
+            preferred_materials: selectedMaterials,
           })
           .eq("id", user.id);
 
@@ -54,7 +88,7 @@ const Onboarding = () => {
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-6">
-      <Card className="w-full max-w-2xl p-8">
+      <Card className="w-full max-w-3xl p-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-foreground mb-2">
             Complete Your Profile
@@ -93,52 +127,102 @@ const Onboarding = () => {
           ))}
         </div>
 
-        {/* Step 1 */}
+        {/* Step 1 - Specialties */}
         {step === 1 && (
           <div className="space-y-6">
             <h2 className="text-xl font-semibold text-foreground">
-              Specialty & Focus Areas
+              Select Your Specialties
             </h2>
-            <div>
-              <label className="text-sm font-medium text-foreground">
-                Primary Specialty
-              </label>
-              <Input
-                type="text"
-                value={specialty}
-                onChange={(e) => setSpecialty(e.target.value)}
-                placeholder="e.g., Prosthodontics, General Dentistry"
-                className="mt-1"
-              />
+            <p className="text-sm text-muted-foreground">Choose all that apply</p>
+            
+            <div className="grid grid-cols-2 gap-3">
+              {specialtiesList.map((specialty) => (
+                <button
+                  key={specialty}
+                  type="button"
+                  onClick={() => toggleSpecialty(specialty)}
+                  className={`p-4 rounded-lg border-2 text-left transition-all ${
+                    selectedSpecialties.includes(specialty)
+                      ? "border-primary bg-primary/5"
+                      : "border-border hover:border-primary/50"
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="font-medium text-foreground">{specialty}</span>
+                    {selectedSpecialties.includes(specialty) && (
+                      <CheckCircle2 className="h-5 w-5 text-primary" />
+                    )}
+                  </div>
+                </button>
+              ))}
             </div>
+
+            {selectedSpecialties.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {selectedSpecialties.map((specialty) => (
+                  <div key={specialty} className="px-3 py-1 rounded-full bg-primary/10 text-primary text-sm flex items-center gap-2">
+                    {specialty}
+                    <button onClick={() => toggleSpecialty(specialty)} className="hover:bg-primary/20 rounded-full p-0.5">
+                      <X className="h-3 w-3" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+
             <Button
               onClick={() => setStep(2)}
               className="w-full bg-primary hover:bg-primary/90"
-              disabled={!specialty}
+              disabled={selectedSpecialties.length === 0}
             >
               Continue
             </Button>
           </div>
         )}
 
-        {/* Step 2 */}
+        {/* Step 2 - Materials */}
         {step === 2 && (
           <div className="space-y-6">
             <h2 className="text-xl font-semibold text-foreground">
               Preferred Materials
             </h2>
-            <div>
-              <label className="text-sm font-medium text-foreground">
-                Materials You Work With
-              </label>
-              <Textarea
-                value={preferredMaterials}
-                onChange={(e) => setPreferredMaterials(e.target.value)}
-                placeholder="e.g., Zirconia, E-max, PMMA (comma-separated)"
-                className="mt-1"
-                rows={4}
-              />
+            <p className="text-sm text-muted-foreground">Select materials you commonly work with</p>
+            
+            <div className="grid grid-cols-2 gap-3">
+              {materialsList.map((material) => (
+                <button
+                  key={material}
+                  type="button"
+                  onClick={() => toggleMaterial(material)}
+                  className={`p-4 rounded-lg border-2 text-left transition-all ${
+                    selectedMaterials.includes(material)
+                      ? "border-secondary bg-secondary/5"
+                      : "border-border hover:border-secondary/50"
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="font-medium text-foreground">{material}</span>
+                    {selectedMaterials.includes(material) && (
+                      <CheckCircle2 className="h-5 w-5 text-secondary" />
+                    )}
+                  </div>
+                </button>
+              ))}
             </div>
+
+            {selectedMaterials.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {selectedMaterials.map((material) => (
+                  <div key={material} className="px-3 py-1 rounded-full bg-secondary/10 text-secondary-foreground text-sm flex items-center gap-2">
+                    {material}
+                    <button onClick={() => toggleMaterial(material)} className="hover:bg-secondary/20 rounded-full p-0.5">
+                      <X className="h-3 w-3" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+
             <div className="flex gap-4">
               <Button
                 onClick={() => setStep(1)}
@@ -150,7 +234,7 @@ const Onboarding = () => {
               <Button
                 onClick={() => setStep(3)}
                 className="flex-1 bg-primary hover:bg-primary/90"
-                disabled={!preferredMaterials}
+                disabled={selectedMaterials.length === 0}
               >
                 Continue
               </Button>
@@ -158,7 +242,7 @@ const Onboarding = () => {
           </div>
         )}
 
-        {/* Step 3 */}
+        {/* Step 3 - Confirmation */}
         {step === 3 && (
           <div className="space-y-6">
             <div className="text-center py-8">
