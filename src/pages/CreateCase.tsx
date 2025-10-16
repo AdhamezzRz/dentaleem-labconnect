@@ -50,10 +50,11 @@ const CreateCase = () => {
 
   const steps = [
     { number: 1, title: "Patient Info", subtitle: "Details & restorations" },
-    { number: 2, title: "Upload Files", subtitle: "STL, images, X-rays" },
-    { number: 3, title: "Material", subtitle: "Select materials" },
-    { number: 4, title: "Select Lab", subtitle: "Choose from marketplace" },
-    { number: 5, title: "Payment", subtitle: "Confirm & pay" },
+    { number: 2, title: "Material", subtitle: "Select materials" },
+    { number: 3, title: "Select Lab", subtitle: "Choose from marketplace" },
+    { number: 4, title: "Upload Files", subtitle: "STL, images, X-rays" },
+    { number: 5, title: "Review Order", subtitle: "Confirm details" },
+    { number: 6, title: "Payment", subtitle: "Confirm & pay" },
   ];
 
   const addRestoration = () => {
@@ -150,7 +151,7 @@ const CreateCase = () => {
   };
 
   const handleNext = () => {
-    // Validation for step 1
+    // Validation for step 1 - Patient Info
     if (currentStep === 1) {
       if (!patientName) {
         toast.error("Patient name is required");
@@ -162,8 +163,24 @@ const CreateCase = () => {
       }
     }
 
-    // Validation for step 2
+    // Validation for step 2 - Material
     if (currentStep === 2) {
+      if (restorations.some(r => !r.isTryIn && (!r.material || !r.shade))) {
+        toast.error("Please select material and shade for all restorations");
+        return;
+      }
+    }
+
+    // Validation for step 3 - Lab Selection
+    if (currentStep === 3) {
+      if (!selectedLab) {
+        toast.error("Please select a laboratory");
+        return;
+      }
+    }
+
+    // Validation for step 4 - Upload Files
+    if (currentStep === 4) {
       const hasIntraoralScan = uploadedFiles.some(f => f.type === "intraoral");
       const hasImage = uploadedFiles.some(f => f.type === "image");
       if (!hasIntraoralScan || !hasImage) {
@@ -172,7 +189,7 @@ const CreateCase = () => {
       }
     }
 
-    if (currentStep < 5) {
+    if (currentStep < 6) {
       setCurrentStep(currentStep + 1);
     }
   };
@@ -251,7 +268,7 @@ const CreateCase = () => {
           <div className="w-full bg-muted rounded-full h-2 mt-3">
             <div 
               className="bg-gradient-to-r from-primary to-secondary h-2 rounded-full transition-all duration-300"
-              style={{ width: `${(currentStep / 5) * 100}%` }}
+              style={{ width: `${(currentStep / 6) * 100}%` }}
             ></div>
           </div>
         </div>
@@ -475,8 +492,133 @@ const CreateCase = () => {
             </div>
           )}
 
-          {/* Step 2 - File Uploads */}
+          {/* Step 2 - Material Selection */}
           {currentStep === 2 && (
+            <div className="space-y-6">
+              <h2 className="text-2xl font-semibold text-foreground mb-4">Select Materials</h2>
+              {restorations.filter(r => !r.isTryIn).map((restoration, index) => (
+                <Card key={restoration.id} className="p-6 border-2">
+                  <h3 className="font-semibold text-foreground mb-4">
+                    Restoration {index + 1} - {restoration.type || "Type"} (Teeth: {restoration.teeth.join(", ")})
+                  </h3>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    {[
+                      { name: "Zirconia", desc: "High strength, aesthetic", popular: true },
+                      { name: "E-max", desc: "Maximum aesthetics", popular: true },
+                      { name: "PMMA", desc: "Temporary restorations", popular: false },
+                      { name: "Metal Ceramic", desc: "Traditional PFM", popular: false },
+                    ].map((material) => (
+                      <button
+                        key={material.name}
+                        type="button"
+                        onClick={() => updateRestoration(restoration.id, "material", material.name)}
+                        className={`p-4 rounded-lg border-2 text-left transition-all ${
+                          restoration.material === material.name
+                            ? "border-primary bg-primary/5"
+                            : "border-border hover:border-primary/50"
+                        }`}
+                      >
+                        <div className="flex items-start justify-between mb-2">
+                          <div>
+                            <h4 className="font-semibold text-foreground">{material.name}</h4>
+                            <p className="text-sm text-muted-foreground">{material.desc}</p>
+                          </div>
+                          {material.popular && (
+                            <div className="px-2 py-1 rounded-full bg-secondary/10 text-xs font-medium text-secondary">
+                              Popular
+                            </div>
+                          )}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>Shade Selection *</Label>
+                    <Select 
+                      value={restoration.shade}
+                      onValueChange={(value) => updateRestoration(restoration.id, "shade", value)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select shade" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="a1">A1</SelectItem>
+                        <SelectItem value="a2">A2</SelectItem>
+                        <SelectItem value="a3">A3</SelectItem>
+                        <SelectItem value="b1">B1</SelectItem>
+                        <SelectItem value="custom">Custom Match</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          )}
+
+          {/* Step 3 - Lab Selection */}
+          {currentStep === 3 && (
+            <div className="space-y-6">
+              <h2 className="text-2xl font-semibold text-foreground mb-4">Select Laboratory</h2>
+              
+              {/* Filters */}
+              <div className="flex gap-2 flex-wrap">
+                {["Fastest Delivery", "Cheapest Price", "Best Technology", "Highest Rating"].map((filter) => (
+                  <Button key={filter} variant="outline" size="sm">
+                    {filter}
+                  </Button>
+                ))}
+              </div>
+
+              <div className="space-y-4">
+                {[
+                  { name: "Precision Dental Lab", rating: 4.9, turnaround: "10-12 days", price: "$350", verified: true },
+                  { name: "Elite Dental Solutions", rating: 4.8, turnaround: "8-10 days", price: "$380", verified: true },
+                  { name: "Pro Lab Technologies", rating: 4.7, turnaround: "12-14 days", price: "$320", verified: true },
+                ].map((lab) => (
+                  <Card 
+                    key={lab.name}
+                    className={`p-6 cursor-pointer transition-all ${
+                      selectedLab === lab.name ? "border-primary border-2" : "hover:border-primary/50"
+                    }`}
+                    onClick={() => setSelectedLab(lab.name)}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center relative">
+                          <div className="w-6 h-6 rounded-full bg-primary"></div>
+                          {lab.verified && (
+                            <div className="absolute -top-1 -right-1 bg-secondary text-white text-xs px-1.5 py-0.5 rounded-full font-medium">
+                              ✓
+                            </div>
+                          )}
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2 mb-1">
+                            <h3 className="font-semibold text-foreground">{lab.name}</h3>
+                          </div>
+                          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                            <span>⭐ {lab.rating}</span>
+                            <span>📅 {lab.turnaround}</span>
+                            <span className="font-semibold text-foreground">{lab.price}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <Button variant={selectedLab === lab.name ? "default" : "outline"}>
+                        {selectedLab === lab.name ? "Selected" : "Select"}
+                      </Button>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+              <Button variant="ghost" className="w-full">View Full Marketplace</Button>
+            </div>
+          )}
+
+
+          {/* Step 4 - File Uploads */}
+          {currentStep === 4 && (
             <div className="space-y-6">
               <h2 className="text-2xl font-semibold text-foreground mb-4">Upload Files</h2>
               <div className="bg-secondary/10 border border-secondary/20 rounded-lg p-4 flex items-start gap-3 mb-6">
@@ -551,132 +693,141 @@ const CreateCase = () => {
             </div>
           )}
 
-          {/* Step 3 - Material Selection */}
-          {currentStep === 3 && (
+          {/* Step 5 - Review Order */}
+          {currentStep === 5 && (
             <div className="space-y-6">
-              <h2 className="text-2xl font-semibold text-foreground mb-4">Select Materials</h2>
-              {restorations.map((restoration, index) => (
-                <Card key={restoration.id} className="p-6 border-2">
-                  <h3 className="font-semibold text-foreground mb-4">
-                    Restoration {index + 1} - {restoration.type || "Type"} (Teeth: {restoration.teeth.join(", ")})
-                  </h3>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    {[
-                      { name: "Zirconia", desc: "High strength, aesthetic", popular: true },
-                      { name: "E-max", desc: "Maximum aesthetics", popular: true },
-                      { name: "PMMA", desc: "Temporary restorations", popular: false },
-                      { name: "Metal Ceramic", desc: "Traditional PFM", popular: false },
-                    ].map((material) => (
-                      <button
-                        key={material.name}
-                        type="button"
-                        onClick={() => updateRestoration(restoration.id, "material", material.name)}
-                        className={`p-4 rounded-lg border-2 text-left transition-all ${
-                          restoration.material === material.name
-                            ? "border-primary bg-primary/5"
-                            : "border-border hover:border-primary/50"
-                        }`}
-                      >
-                        <div className="flex items-start justify-between mb-2">
-                          <div>
-                            <h4 className="font-semibold text-foreground">{material.name}</h4>
-                            <p className="text-sm text-muted-foreground">{material.desc}</p>
-                          </div>
-                          {material.popular && (
-                            <div className="px-2 py-1 rounded-full bg-secondary/10 text-xs font-medium text-secondary">
-                              Popular
-                            </div>
-                          )}
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label>Shade Selection *</Label>
-                    <Select 
-                      value={restoration.shade}
-                      onValueChange={(value) => updateRestoration(restoration.id, "shade", value)}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select shade" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="a1">A1</SelectItem>
-                        <SelectItem value="a2">A2</SelectItem>
-                        <SelectItem value="a3">A3</SelectItem>
-                        <SelectItem value="b1">B1</SelectItem>
-                        <SelectItem value="custom">Custom Match</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </Card>
-              ))}
-            </div>
-          )}
-
-          {/* Step 4 - Lab Selection */}
-          {currentStep === 4 && (
-            <div className="space-y-6">
-              <h2 className="text-2xl font-semibold text-foreground mb-4">Select Laboratory</h2>
+              <h2 className="text-2xl font-semibold text-foreground mb-4">Review Your Order</h2>
               
-              {/* Filters */}
-              <div className="flex gap-2 flex-wrap">
-                {["Fastest Delivery", "Cheapest Price", "Best Technology", "Highest Rating"].map((filter) => (
-                  <Button key={filter} variant="outline" size="sm">
-                    {filter}
-                  </Button>
-                ))}
-              </div>
+              {/* Patient Information */}
+              <Card className="p-6 border-2 border-primary/20">
+                <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2">
+                  <CheckCircle2 className="h-5 w-5 text-primary" />
+                  Patient Information
+                </h3>
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <p className="text-muted-foreground">Patient Name</p>
+                    <p className="font-medium text-foreground mt-1">{patientName}</p>
+                  </div>
+                  <div>
+                    <p className="text-muted-foreground">Patient Type</p>
+                    <p className="font-medium text-foreground mt-1 capitalize">{patientType}</p>
+                  </div>
+                  {internalPatientId && (
+                    <div>
+                      <p className="text-muted-foreground">Internal ID</p>
+                      <p className="font-medium text-foreground mt-1">{internalPatientId}</p>
+                    </div>
+                  )}
+                </div>
+              </Card>
 
-              <div className="space-y-4">
-                {[
-                  { name: "Precision Dental Lab", rating: 4.9, turnaround: "10-12 days", price: "$350", verified: true },
-                  { name: "Elite Dental Solutions", rating: 4.8, turnaround: "8-10 days", price: "$380", verified: true },
-                  { name: "Pro Lab Technologies", rating: 4.7, turnaround: "12-14 days", price: "$320", verified: true },
-                ].map((lab) => (
-                  <Card 
-                    key={lab.name}
-                    className={`p-6 cursor-pointer transition-all ${
-                      selectedLab === lab.name ? "border-primary border-2" : "hover:border-primary/50"
-                    }`}
-                    onClick={() => setSelectedLab(lab.name)}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center relative">
-                          <div className="w-6 h-6 rounded-full bg-primary"></div>
-                          {lab.verified && (
-                            <div className="absolute -top-1 -right-1 bg-secondary text-white text-xs px-1.5 py-0.5 rounded-full font-medium">
-                              ✓
-                            </div>
-                          )}
+              {/* Restorations */}
+              <Card className="p-6 border-2 border-primary/20">
+                <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2">
+                  <CheckCircle2 className="h-5 w-5 text-primary" />
+                  Restorations ({restorations.filter(r => !r.isTryIn).length} items)
+                </h3>
+                <div className="space-y-4">
+                  {restorations.map((restoration, index) => (
+                    <div 
+                      key={restoration.id}
+                      className={`p-4 rounded-lg ${
+                        restoration.isTryIn 
+                          ? "bg-secondary/5 border border-secondary/20 ml-8" 
+                          : "bg-muted/30"
+                      }`}
+                    >
+                      <div className="grid grid-cols-2 gap-3 text-sm">
+                        <div>
+                          <p className="text-muted-foreground">Type</p>
+                          <p className="font-medium text-foreground mt-1">
+                            {restoration.isTryIn ? "Try-In (PMMA)" : restoration.type}
+                          </p>
                         </div>
                         <div>
-                          <div className="flex items-center gap-2 mb-1">
-                            <h3 className="font-semibold text-foreground">{lab.name}</h3>
-                          </div>
-                          <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                            <span>⭐ {lab.rating}</span>
-                            <span>📅 {lab.turnaround}</span>
-                            <span className="font-semibold text-foreground">{lab.price}</span>
-                          </div>
+                          <p className="text-muted-foreground">Material</p>
+                          <p className="font-medium text-foreground mt-1">{restoration.material}</p>
                         </div>
+                        <div>
+                          <p className="text-muted-foreground">Teeth</p>
+                          <p className="font-medium text-foreground mt-1">{restoration.teeth.join(", ")}</p>
+                        </div>
+                        <div>
+                          <p className="text-muted-foreground">Shade</p>
+                          <p className="font-medium text-foreground mt-1">{restoration.shade}</p>
+                        </div>
+                        {restoration.notes && !restoration.isTryIn && (
+                          <div className="col-span-2">
+                            <p className="text-muted-foreground">Notes</p>
+                            <p className="font-medium text-foreground mt-1">{restoration.notes}</p>
+                          </div>
+                        )}
                       </div>
-                      <Button variant={selectedLab === lab.name ? "default" : "outline"}>
-                        {selectedLab === lab.name ? "Selected" : "Select"}
-                      </Button>
                     </div>
-                  </Card>
-                ))}
-              </div>
-              <Button variant="ghost" className="w-full">View Full Marketplace</Button>
+                  ))}
+                </div>
+              </Card>
+
+              {/* Lab Selection */}
+              <Card className="p-6 border-2 border-primary/20">
+                <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2">
+                  <CheckCircle2 className="h-5 w-5 text-primary" />
+                  Selected Laboratory
+                </h3>
+                <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg">
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <div className="w-5 h-5 rounded-full bg-primary"></div>
+                  </div>
+                  <div>
+                    <p className="font-medium text-foreground">{selectedLab}</p>
+                    <p className="text-sm text-muted-foreground">Gold Certified Lab</p>
+                  </div>
+                </div>
+              </Card>
+
+              {/* Files Uploaded */}
+              <Card className="p-6 border-2 border-primary/20">
+                <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2">
+                  <CheckCircle2 className="h-5 w-5 text-primary" />
+                  Uploaded Files ({uploadedFiles.length})
+                </h3>
+                <div className="space-y-2">
+                  {uploadedFiles.map((file, idx) => (
+                    <div key={idx} className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg">
+                      <CheckCircle2 className="h-4 w-4 text-secondary" />
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-foreground">{file.name}</p>
+                        <p className="text-xs text-muted-foreground">Type: {file.type}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+
+              {/* Price Summary */}
+              <Card className="p-6 border-2 border-primary/20 bg-primary/5">
+                <h3 className="font-semibold text-foreground mb-4">Price Summary</h3>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Base Price</span>
+                    <span className="font-medium text-foreground">${basePrice} per restoration</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Total Restorations</span>
+                    <span className="font-medium text-foreground">{restorations.filter(r => !r.isTryIn).length} items</span>
+                  </div>
+                  <div className="flex justify-between pt-2 border-t border-border">
+                    <span className="font-semibold text-foreground">Subtotal</span>
+                    <span className="font-bold text-primary">${totalPrice.toFixed(2)}</span>
+                  </div>
+                </div>
+              </Card>
             </div>
           )}
 
-          {/* Step 5 - Payment */}
-          {currentStep === 5 && (
+          {/* Step 6 - Payment */}
+          {currentStep === 6 && (
             <div className="space-y-6">
               <h2 className="text-2xl font-semibold text-foreground mb-4">Payment & Confirmation</h2>
               
@@ -825,7 +976,7 @@ const CreateCase = () => {
                 Save as Draft
               </Button>
             </div>
-            {currentStep < 5 ? (
+            {currentStep < 6 ? (
               <Button onClick={handleNext} className="bg-primary hover:bg-primary/90">
                 Next
                 <ArrowRight className="ml-2 h-4 w-4" />
