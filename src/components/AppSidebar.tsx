@@ -97,9 +97,11 @@ export function AppSidebar() {
   return (
     <Sidebar
       collapsible="icon"
-      className="border-r border-border transition-all duration-200"
+      className="border-r border-primary-foreground/10 transition-all duration-300 shadow-lg"
       style={{
+        width: open ? "260px" : "80px",
         backgroundColor: "hsl(var(--primary))",
+        backgroundImage: "linear-gradient(180deg, hsl(var(--primary)) 0%, hsl(var(--primary) / 0.95) 100%)",
       }}
     >
       {/* Header with Logo and User Info */}
@@ -164,15 +166,15 @@ export function AppSidebar() {
         )}
       </SidebarHeader>
 
-      <SidebarContent className="px-2">
-        {/* Main Navigation */}
-        <SidebarGroup>
-          <SidebarGroupLabel className="text-primary-foreground/70 px-2">
-            Navigation
+      <SidebarContent className="px-3">
+        {/* Main Navigation Group */}
+        <SidebarGroup className="mb-8">
+          <SidebarGroupLabel className="text-primary-foreground/70 px-3 text-xs font-semibold uppercase tracking-wider mb-2">
+            Main
           </SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu>
-              {mainNavItems.map((item) => {
+            <SidebarMenu className="space-y-1">
+              {mainNavItems.slice(0, 3).map((item) => {
                 const isActive = location.pathname === item.url;
                 const ItemIcon = item.icon;
                 return (
@@ -182,14 +184,14 @@ export function AppSidebar() {
                       tooltip={item.tooltip}
                       className={`${
                         isActive
-                          ? "bg-secondary text-secondary-foreground hover:bg-secondary hover:text-secondary-foreground border-l-2 border-secondary"
-                          : "text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
-                      } transition-all duration-200`}
+                          ? "bg-secondary text-secondary-foreground hover:bg-secondary hover:text-secondary-foreground border-l-4 border-secondary shadow-md"
+                          : "text-primary-foreground/90 hover:bg-primary-foreground/10 hover:text-secondary border-l-4 border-transparent"
+                      } transition-all duration-200 py-4 px-6 rounded-lg`}
                     >
-                      <Link to={item.url} className="flex items-center gap-2">
-                        <ItemIcon className="h-4 w-4" />
-                        <span>{item.title}</span>
-                        {item.badge && (
+                      <Link to={item.url} className="flex items-center gap-3 w-full">
+                        <ItemIcon className="h-5 w-5 flex-shrink-0" />
+                        {open && <span className="font-medium">{item.title}</span>}
+                        {item.badge && open && (
                           <Badge className="ml-auto bg-secondary text-secondary-foreground">
                             {item.badge}
                           </Badge>
@@ -203,96 +205,149 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        {/* Create New Case CTA */}
-        {open && (
-          <div className="px-2 py-4">
-            <Link to="/create-case">
-              <Button 
-                className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground font-medium"
-                size="sm"
-              >
-                <PlusCircle className="mr-2 h-4 w-4" />
-                Create New Case
-              </Button>
-            </Link>
-          </div>
-        )}
+        {/* Workflow Group */}
+        <SidebarGroup className="mb-8">
+          <SidebarGroupLabel className="text-primary-foreground/70 px-3 text-xs font-semibold uppercase tracking-wider mb-2">
+            Workflow
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu className="space-y-1">
+              {mainNavItems.slice(3, 7).map((item) => {
+                const isActive = location.pathname === item.url;
+                const ItemIcon = item.icon;
+                return (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton
+                      asChild
+                      tooltip={item.tooltip}
+                      className={`${
+                        isActive
+                          ? "bg-secondary text-secondary-foreground hover:bg-secondary hover:text-secondary-foreground border-l-4 border-secondary shadow-md"
+                          : "text-primary-foreground/90 hover:bg-primary-foreground/10 hover:text-secondary border-l-4 border-transparent"
+                      } transition-all duration-200 py-4 px-6 rounded-lg`}
+                    >
+                      <Link to={item.url} className="flex items-center gap-3 w-full">
+                        <ItemIcon className="h-5 w-5 flex-shrink-0" />
+                        {open && <span className="font-medium">{item.title}</span>}
+                        {item.badge && open && (
+                          <Badge className="ml-auto bg-secondary text-secondary-foreground">
+                            {item.badge}
+                          </Badge>
+                        )}
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        {/* Insights Group */}
+        <SidebarGroup className="mb-8">
+          <SidebarGroupLabel className="text-primary-foreground/70 px-3 text-xs font-semibold uppercase tracking-wider mb-2">
+            Insights
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu className="space-y-1">
+              {mainNavItems.slice(7).map((item) => {
+                const isActive = location.pathname === item.url;
+                const ItemIcon = item.icon;
+                return (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton
+                      asChild
+                      tooltip={item.tooltip}
+                      className={`${
+                        isActive
+                          ? "bg-secondary text-secondary-foreground hover:bg-secondary hover:text-secondary-foreground border-l-4 border-secondary shadow-md"
+                          : "text-primary-foreground/90 hover:bg-primary-foreground/10 hover:text-secondary border-l-4 border-transparent"
+                      } transition-all duration-200 py-4 px-6 rounded-lg`}
+                    >
+                      <Link to={item.url} className="flex items-center gap-3 w-full">
+                        <ItemIcon className="h-5 w-5 flex-shrink-0" />
+                        {open && <span className="font-medium">{item.title}</span>}
+                        {item.badge && open && (
+                          <Badge className="ml-auto bg-secondary text-secondary-foreground">
+                            {item.badge}
+                          </Badge>
+                        )}
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
 
         {/* Smart Insights Widget */}
         {open && (
-          <SidebarGroup>
-            <SidebarGroupLabel className="text-primary-foreground/70 px-2">
+          <SidebarGroup className="mb-8">
+            <SidebarGroupLabel className="text-primary-foreground/70 px-3 text-xs font-semibold uppercase tracking-wider mb-2">
               Quick Stats
             </SidebarGroupLabel>
-            <div className="px-2 space-y-2">
-              <div className="bg-primary-foreground/5 rounded-lg p-3 border border-primary-foreground/10">
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs text-primary-foreground/70">Avg Turnaround</span>
-                  <BarChart3 className="h-3 w-3 text-secondary" />
+            <div className="px-3 space-y-3">
+              <div className="bg-primary-foreground/10 rounded-xl p-4 border border-primary-foreground/20 backdrop-blur-sm hover:bg-primary-foreground/15 transition-all duration-200">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs text-primary-foreground/80 font-medium">Avg Turnaround</span>
+                  <BarChart3 className="h-4 w-4 text-secondary" />
                 </div>
-                <p className="text-lg font-bold text-primary-foreground">3.4 Days</p>
+                <p className="text-2xl font-bold text-primary-foreground">3.4 Days</p>
               </div>
-              <div className="bg-primary-foreground/5 rounded-lg p-3 border border-primary-foreground/10">
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs text-primary-foreground/70">This Month</span>
-                  <CreditCard className="h-3 w-3 text-secondary" />
+              <div className="bg-primary-foreground/10 rounded-xl p-4 border border-primary-foreground/20 backdrop-blur-sm hover:bg-primary-foreground/15 transition-all duration-200">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs text-primary-foreground/80 font-medium">This Month</span>
+                  <CreditCard className="h-4 w-4 text-secondary" />
                 </div>
-                <p className="text-lg font-bold text-primary-foreground">EGP 12,500</p>
+                <p className="text-2xl font-bold text-primary-foreground">EGP 12,500</p>
               </div>
-              <div className="bg-primary-foreground/5 rounded-lg p-3 border border-primary-foreground/10">
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs text-primary-foreground/70">Top Lab</span>
-                  <Star className="h-3 w-3 text-secondary" />
+              <div className="bg-primary-foreground/10 rounded-xl p-4 border border-primary-foreground/20 backdrop-blur-sm hover:bg-primary-foreground/15 transition-all duration-200">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs text-primary-foreground/80 font-medium">Top Lab</span>
+                  <Star className="h-4 w-4 text-secondary" />
                 </div>
-                <p className="text-sm font-semibold text-primary-foreground">SmileWorks Lab</p>
-                <Badge className="mt-1 bg-secondary/20 text-secondary border-secondary/30">
+                <p className="text-base font-semibold text-primary-foreground">SmileWorks Lab</p>
+                <Badge className="mt-2 bg-secondary/30 text-secondary border-secondary/40 text-xs">
                   Gold Certified
                 </Badge>
               </div>
             </div>
           </SidebarGroup>
         )}
-
-        {/* Quick Actions */}
-        {open && (
-          <SidebarGroup>
-            <SidebarGroupLabel className="text-primary-foreground/70 px-2">
-              Quick Actions
-            </SidebarGroupLabel>
-            <div className="grid grid-cols-2 gap-2 px-2">
-              {quickActions.map((action) => {
-                const ActionIcon = action.icon;
-                return (
-                  <Button
-                    key={action.action}
-                    variant="outline"
-                    size="sm"
-                    className="flex flex-col h-auto py-3 bg-primary-foreground/5 border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground hover:border-secondary"
-                    onClick={() => handleQuickAction(action.action)}
-                  >
-                    <ActionIcon className="h-4 w-4 mb-1" />
-                    <span className="text-xs">{action.title}</span>
-                  </Button>
-                );
-              })}
-            </div>
-          </SidebarGroup>
-        )}
       </SidebarContent>
 
-      {/* Footer with Notifications and Settings */}
-      <SidebarFooter className="border-t border-primary-foreground/10 p-2">
-        <SidebarMenu>
+      {/* Create New Case CTA - Fixed at bottom of navigation */}
+      {open && (
+        <div className="px-3 mb-8">
+          <Link to="/create-case">
+            <Button 
+              className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground font-semibold py-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-[1.02]"
+              size="lg"
+            >
+              <PlusCircle className="mr-3 h-5 w-5" />
+              Create New Case
+            </Button>
+          </Link>
+        </div>
+      )}
+
+      {/* Footer with System Actions */}
+      <SidebarFooter className="border-t border-primary-foreground/10 p-3 mt-auto">
+        <SidebarMenu className="space-y-1">
           <SidebarMenuItem>
             <SidebarMenuButton
               tooltip="Notifications"
-              className="text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground relative"
+              className="text-primary-foreground/90 hover:bg-primary-foreground/10 hover:text-secondary transition-all duration-200 py-4 px-6 rounded-lg relative"
             >
-              <Bell className="h-4 w-4" />
-              {open && <span>Notifications</span>}
-              <Badge className="ml-auto bg-secondary text-secondary-foreground">
-                5
-              </Badge>
+              <Bell className="h-5 w-5 flex-shrink-0" />
+              {open && <span className="font-medium">Notifications</span>}
+              {open && (
+                <Badge className="ml-auto bg-secondary text-secondary-foreground">
+                  5
+                </Badge>
+              )}
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
@@ -301,23 +356,23 @@ export function AppSidebar() {
               tooltip="Settings"
               className={`${
                 location.pathname === "/settings"
-                  ? "bg-secondary text-secondary-foreground"
-                  : "text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
-              }`}
+                  ? "bg-secondary text-secondary-foreground hover:bg-secondary hover:text-secondary-foreground border-l-4 border-secondary shadow-md"
+                  : "text-primary-foreground/90 hover:bg-primary-foreground/10 hover:text-secondary border-l-4 border-transparent"
+              } transition-all duration-200 py-4 px-6 rounded-lg`}
             >
-              <Link to="/settings">
-                <Settings className="h-4 w-4" />
-                {open && <span>Settings</span>}
+              <Link to="/settings" className="flex items-center gap-3 w-full">
+                <Settings className="h-5 w-5 flex-shrink-0" />
+                {open && <span className="font-medium">Settings</span>}
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton
               tooltip="Help & Support"
-              className="text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
+              className="text-primary-foreground/90 hover:bg-primary-foreground/10 hover:text-secondary transition-all duration-200 py-4 px-6 rounded-lg"
             >
-              <HelpCircle className="h-4 w-4" />
-              {open && <span>Help & Support</span>}
+              <HelpCircle className="h-5 w-5 flex-shrink-0" />
+              {open && <span className="font-medium">Help & Support</span>}
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
