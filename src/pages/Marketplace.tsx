@@ -280,8 +280,12 @@ const Marketplace = () => {
 
                   {/* Actions */}
                   <div className="flex gap-3">
-                    <Button className="bg-primary hover:bg-primary/90">View Profile</Button>
-                    <Button variant="outline">Start Case</Button>
+                    <Link to={`/lab/${lab.id}`}>
+                      <Button className="bg-primary hover:bg-primary/90">View Profile</Button>
+                    </Link>
+                    <Link to="/create-case">
+                      <Button variant="outline">Start Case</Button>
+                    </Link>
                     <Button variant="ghost">Contact Lab</Button>
                   </div>
                 </div>

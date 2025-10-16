@@ -142,7 +142,9 @@ const Dashboard = () => {
                       <p className="text-sm text-muted-foreground">Due</p>
                       <p className="text-sm font-medium text-foreground">{caseItem.dueDate}</p>
                     </div>
-                    <Button variant="outline" size="sm">View Details</Button>
+                    <Link to={`/case/${caseItem.id}`}>
+                      <Button variant="outline" size="sm">View Details</Button>
+                    </Link>
                   </div>
                 </div>
 

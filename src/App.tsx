@@ -9,6 +9,7 @@ import Onboarding from "./pages/Onboarding";
 import Dashboard from "./pages/Dashboard";
 import CreateCase from "./pages/CreateCase";
 import Marketplace from "./pages/Marketplace";
+import LabProfile from "./pages/LabProfile";
 import CaseDetail from "./pages/CaseDetail";
 import Payments from "./pages/Payments";
 import Analytics from "./pages/Analytics";
@@ -30,6 +31,7 @@ const App = () => (
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/create-case" element={<CreateCase />} />
           <Route path="/marketplace" element={<Marketplace />} />
+          <Route path="/lab/:id" element={<LabProfile />} />
           <Route path="/case/:id" element={<CaseDetail />} />
           <Route path="/payments" element={<Payments />} />
           <Route path="/analytics" element={<Analytics />} />
