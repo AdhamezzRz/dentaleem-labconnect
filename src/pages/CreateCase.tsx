@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ArrowLeft, ArrowRight, Upload, CheckCircle2, Plus, X, AlertCircle, Save } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import TeethChart from "@/components/TeethChart";
 import AddCreditCardModal from "@/components/AddCreditCardModal";
@@ -31,6 +31,8 @@ interface UploadedFile {
 }
 
 const CreateCase = () => {
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
   const [patientName, setPatientName] = useState("");
   const [internalPatientId, setInternalPatientId] = useState("");
@@ -46,7 +48,15 @@ const CreateCase = () => {
   const [promoCode, setPromoCode] = useState("");
   const [promoApplied, setPromoApplied] = useState(false);
   const [promoDiscount, setPromoDiscount] = useState(0);
-  const navigate = useNavigate();
+
+  // Pre-fill lab from marketplace
+  useEffect(() => {
+    const labId = searchParams.get('lab');
+    if (labId) {
+      setSelectedLab(labId);
+      toast.success("Lab pre-selected from marketplace!");
+    }
+  }, [searchParams]);
 
   const steps = [
     { number: 1, title: "Patient Info", subtitle: "Details & restorations" },
