@@ -12,6 +12,10 @@ const Dashboard = () => {
     { id: "PO-2024-003", patient: "C.R.", status: "Delivery", lab: "Pro Lab", phase: 4, progress: 80, dueDate: "Jan 24" },
   ];
 
+  const draftCases = [
+    { id: "DRAFT-001", patient: "M.K.", restorations: 2, lastSaved: "2 hours ago" },
+  ];
+
   const stats = [
     { label: "Active Cases", value: "8", icon: Package, color: "primary", change: "+2 this week" },
     { label: "Avg. Turnaround", value: "12d", icon: Clock, color: "secondary", change: "2d faster" },
@@ -71,6 +75,43 @@ const Dashboard = () => {
             );
           })}
         </div>
+
+        {/* Draft Cases */}
+        {draftCases.length > 0 && (
+          <Card className="p-6 mb-6 bg-secondary/5 border-secondary/20">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold text-foreground flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-secondary animate-pulse"></div>
+                Draft Cases
+              </h2>
+            </div>
+            <div className="space-y-3">
+              {draftCases.map((draft) => (
+                <div key={draft.id} className="border border-border rounded-lg p-4 bg-card hover:border-secondary/50 transition-colors">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="flex flex-col">
+                        <div className="flex items-center gap-2">
+                          <span className="font-semibold text-foreground">{draft.id}</span>
+                          <span className="px-2 py-0.5 rounded-full bg-secondary/10 text-secondary text-xs font-medium">
+                            Draft
+                          </span>
+                        </div>
+                        <span className="text-sm text-muted-foreground">Patient: {draft.patient} • {draft.restorations} restoration(s)</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <span className="text-xs text-muted-foreground">Saved {draft.lastSaved}</span>
+                      <Link to="/create-case">
+                        <Button variant="outline" size="sm">Resume</Button>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Card>
+        )}
 
         {/* Active Cases */}
         <Card className="p-6">
