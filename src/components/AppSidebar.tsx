@@ -97,32 +97,32 @@ export function AppSidebar() {
   return (
     <Sidebar
       collapsible="icon"
-      className="border-r border-primary-foreground/10 transition-all duration-300 shadow-lg"
+      className="border-r border-border transition-all duration-300 shadow-lg"
       style={{
         width: open ? "260px" : "80px",
-        backgroundColor: "hsl(var(--primary))",
-        backgroundImage: "linear-gradient(180deg, hsl(var(--primary)) 0%, hsl(var(--primary) / 0.95) 100%)",
+        backgroundColor: "hsl(174, 45%, 85%)",
+        backgroundImage: "linear-gradient(180deg, hsl(174, 45%, 85%) 0%, hsl(174, 45%, 80%) 100%)",
       }}
     >
       {/* Header with Logo and User Info */}
-      <SidebarHeader className="border-b border-primary-foreground/10">
+      <SidebarHeader className="border-b border-border/20">
         <Link to="/dashboard" className="flex items-center justify-center gap-2 py-4">
           {open ? (
             <>
               <div className="flex items-center gap-1">
-                <div className="w-2 h-2 rounded-full bg-primary-foreground"></div>
+                <div className="w-2 h-2 rounded-full bg-primary"></div>
                 <div className="w-2 h-2 rounded-full bg-secondary"></div>
-                <div className="w-2 h-2 rounded-full bg-primary-foreground"></div>
+                <div className="w-2 h-2 rounded-full bg-primary"></div>
               </div>
-              <span className="text-lg font-bold text-primary-foreground">
+              <span className="text-lg font-bold text-primary">
                 DENTALEEM
               </span>
             </>
           ) : (
             <div className="flex items-center gap-1">
-              <div className="w-2 h-2 rounded-full bg-primary-foreground"></div>
+              <div className="w-2 h-2 rounded-full bg-primary"></div>
               <div className="w-2 h-2 rounded-full bg-secondary"></div>
-              <div className="w-2 h-2 rounded-full bg-primary-foreground"></div>
+              <div className="w-2 h-2 rounded-full bg-primary"></div>
             </div>
           )}
         </Link>
@@ -133,15 +133,15 @@ export function AppSidebar() {
               <DropdownMenuTrigger asChild>
                 <Button 
                   variant="ghost" 
-                  className="w-full justify-start gap-2 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
+                  className="w-full justify-start gap-2 text-foreground hover:bg-background/10 hover:text-primary"
                 >
                   <Avatar className="h-8 w-8">
                     <AvatarImage src="/placeholder.svg" />
-                    <AvatarFallback className="bg-secondary text-secondary-foreground">DR</AvatarFallback>
+                    <AvatarFallback className="bg-primary text-primary-foreground">DR</AvatarFallback>
                   </Avatar>
                   <div className="flex flex-col items-start text-sm">
-                    <span className="font-medium">Dr. Ahmed Hassan</span>
-                    <span className="text-xs text-primary-foreground/70">Dentist</span>
+                    <span className="font-medium text-foreground">Dr. Ahmed Hassan</span>
+                    <span className="text-xs text-muted-foreground">Dentist</span>
                   </div>
                   <ChevronDown className="ml-auto h-4 w-4" />
                 </Button>
@@ -169,7 +169,7 @@ export function AppSidebar() {
       <SidebarContent className="px-3">
         {/* Main Navigation Group */}
         <SidebarGroup className="mb-8">
-          <SidebarGroupLabel className="text-primary-foreground/70 px-3 text-xs font-semibold uppercase tracking-wider mb-2">
+          <SidebarGroupLabel className="text-muted-foreground px-3 text-xs font-semibold uppercase tracking-wider mb-2">
             Main
           </SidebarGroupLabel>
           <SidebarGroupContent>
@@ -184,15 +184,15 @@ export function AppSidebar() {
                       tooltip={item.tooltip}
                       className={`${
                         isActive
-                          ? "bg-secondary text-secondary-foreground hover:bg-secondary hover:text-secondary-foreground border-l-4 border-secondary shadow-md"
-                          : "text-primary-foreground/90 hover:bg-primary-foreground/10 hover:text-secondary border-l-4 border-transparent"
+                          ? "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground border-l-4 border-primary shadow-md"
+                          : "text-foreground hover:bg-background/20 hover:text-primary border-l-4 border-transparent"
                       } transition-all duration-200 py-4 px-6 rounded-lg`}
                     >
                       <Link to={item.url} className="flex items-center gap-3 w-full">
                         <ItemIcon className="h-5 w-5 flex-shrink-0" />
                         {open && <span className="font-medium">{item.title}</span>}
                         {item.badge && open && (
-                          <Badge className="ml-auto bg-secondary text-secondary-foreground">
+                          <Badge className="ml-auto bg-primary text-primary-foreground">
                             {item.badge}
                           </Badge>
                         )}
@@ -207,7 +207,7 @@ export function AppSidebar() {
 
         {/* Workflow Group */}
         <SidebarGroup className="mb-8">
-          <SidebarGroupLabel className="text-primary-foreground/70 px-3 text-xs font-semibold uppercase tracking-wider mb-2">
+          <SidebarGroupLabel className="text-muted-foreground px-3 text-xs font-semibold uppercase tracking-wider mb-2">
             Workflow
           </SidebarGroupLabel>
           <SidebarGroupContent>
@@ -222,15 +222,15 @@ export function AppSidebar() {
                       tooltip={item.tooltip}
                       className={`${
                         isActive
-                          ? "bg-secondary text-secondary-foreground hover:bg-secondary hover:text-secondary-foreground border-l-4 border-secondary shadow-md"
-                          : "text-primary-foreground/90 hover:bg-primary-foreground/10 hover:text-secondary border-l-4 border-transparent"
+                          ? "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground border-l-4 border-primary shadow-md"
+                          : "text-foreground hover:bg-background/20 hover:text-primary border-l-4 border-transparent"
                       } transition-all duration-200 py-4 px-6 rounded-lg`}
                     >
                       <Link to={item.url} className="flex items-center gap-3 w-full">
                         <ItemIcon className="h-5 w-5 flex-shrink-0" />
                         {open && <span className="font-medium">{item.title}</span>}
                         {item.badge && open && (
-                          <Badge className="ml-auto bg-secondary text-secondary-foreground">
+                          <Badge className="ml-auto bg-primary text-primary-foreground">
                             {item.badge}
                           </Badge>
                         )}
@@ -245,7 +245,7 @@ export function AppSidebar() {
 
         {/* Insights Group */}
         <SidebarGroup className="mb-8">
-          <SidebarGroupLabel className="text-primary-foreground/70 px-3 text-xs font-semibold uppercase tracking-wider mb-2">
+          <SidebarGroupLabel className="text-muted-foreground px-3 text-xs font-semibold uppercase tracking-wider mb-2">
             Insights
           </SidebarGroupLabel>
           <SidebarGroupContent>
@@ -260,15 +260,15 @@ export function AppSidebar() {
                       tooltip={item.tooltip}
                       className={`${
                         isActive
-                          ? "bg-secondary text-secondary-foreground hover:bg-secondary hover:text-secondary-foreground border-l-4 border-secondary shadow-md"
-                          : "text-primary-foreground/90 hover:bg-primary-foreground/10 hover:text-secondary border-l-4 border-transparent"
+                          ? "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground border-l-4 border-primary shadow-md"
+                          : "text-foreground hover:bg-background/20 hover:text-primary border-l-4 border-transparent"
                       } transition-all duration-200 py-4 px-6 rounded-lg`}
                     >
                       <Link to={item.url} className="flex items-center gap-3 w-full">
                         <ItemIcon className="h-5 w-5 flex-shrink-0" />
                         {open && <span className="font-medium">{item.title}</span>}
                         {item.badge && open && (
-                          <Badge className="ml-auto bg-secondary text-secondary-foreground">
+                          <Badge className="ml-auto bg-primary text-primary-foreground">
                             {item.badge}
                           </Badge>
                         )}
@@ -285,31 +285,31 @@ export function AppSidebar() {
         {/* Smart Insights Widget */}
         {open && (
           <SidebarGroup className="mb-8">
-            <SidebarGroupLabel className="text-primary-foreground/70 px-3 text-xs font-semibold uppercase tracking-wider mb-2">
+            <SidebarGroupLabel className="text-muted-foreground px-3 text-xs font-semibold uppercase tracking-wider mb-2">
               Quick Stats
             </SidebarGroupLabel>
             <div className="px-3 space-y-3">
-              <div className="bg-primary-foreground/10 rounded-xl p-4 border border-primary-foreground/20 backdrop-blur-sm hover:bg-primary-foreground/15 transition-all duration-200">
+              <div className="bg-background/30 rounded-xl p-4 border border-border backdrop-blur-sm hover:bg-background/40 transition-all duration-200">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs text-primary-foreground/80 font-medium">Avg Turnaround</span>
-                  <BarChart3 className="h-4 w-4 text-secondary" />
+                  <span className="text-xs text-muted-foreground font-medium">Avg Turnaround</span>
+                  <BarChart3 className="h-4 w-4 text-primary" />
                 </div>
-                <p className="text-2xl font-bold text-primary-foreground">3.4 Days</p>
+                <p className="text-2xl font-bold text-foreground">3.4 Days</p>
               </div>
-              <div className="bg-primary-foreground/10 rounded-xl p-4 border border-primary-foreground/20 backdrop-blur-sm hover:bg-primary-foreground/15 transition-all duration-200">
+              <div className="bg-background/30 rounded-xl p-4 border border-border backdrop-blur-sm hover:bg-background/40 transition-all duration-200">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs text-primary-foreground/80 font-medium">This Month</span>
-                  <CreditCard className="h-4 w-4 text-secondary" />
+                  <span className="text-xs text-muted-foreground font-medium">This Month</span>
+                  <CreditCard className="h-4 w-4 text-primary" />
                 </div>
-                <p className="text-2xl font-bold text-primary-foreground">EGP 12,500</p>
+                <p className="text-2xl font-bold text-foreground">EGP 12,500</p>
               </div>
-              <div className="bg-primary-foreground/10 rounded-xl p-4 border border-primary-foreground/20 backdrop-blur-sm hover:bg-primary-foreground/15 transition-all duration-200">
+              <div className="bg-background/30 rounded-xl p-4 border border-border backdrop-blur-sm hover:bg-background/40 transition-all duration-200">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs text-primary-foreground/80 font-medium">Top Lab</span>
-                  <Star className="h-4 w-4 text-secondary" />
+                  <span className="text-xs text-muted-foreground font-medium">Top Lab</span>
+                  <Star className="h-4 w-4 text-primary" />
                 </div>
-                <p className="text-base font-semibold text-primary-foreground">SmileWorks Lab</p>
-                <Badge className="mt-2 bg-secondary/30 text-secondary border-secondary/40 text-xs">
+                <p className="text-base font-semibold text-foreground">SmileWorks Lab</p>
+                <Badge className="mt-2 bg-secondary/50 text-secondary-foreground border-secondary/60 text-xs">
                   Gold Certified
                 </Badge>
               </div>
@@ -334,17 +334,17 @@ export function AppSidebar() {
       )}
 
       {/* Footer with System Actions */}
-      <SidebarFooter className="border-t border-primary-foreground/10 p-3 mt-auto">
+      <SidebarFooter className="border-t border-border/20 p-3 mt-auto">
         <SidebarMenu className="space-y-1">
           <SidebarMenuItem>
             <SidebarMenuButton
               tooltip="Notifications"
-              className="text-primary-foreground/90 hover:bg-primary-foreground/10 hover:text-secondary transition-all duration-200 py-4 px-6 rounded-lg relative"
+              className="text-foreground hover:bg-background/20 hover:text-primary transition-all duration-200 py-4 px-6 rounded-lg relative"
             >
               <Bell className="h-5 w-5 flex-shrink-0" />
               {open && <span className="font-medium">Notifications</span>}
               {open && (
-                <Badge className="ml-auto bg-secondary text-secondary-foreground">
+                <Badge className="ml-auto bg-primary text-primary-foreground">
                   5
                 </Badge>
               )}
@@ -356,8 +356,8 @@ export function AppSidebar() {
               tooltip="Settings"
               className={`${
                 location.pathname === "/settings"
-                  ? "bg-secondary text-secondary-foreground hover:bg-secondary hover:text-secondary-foreground border-l-4 border-secondary shadow-md"
-                  : "text-primary-foreground/90 hover:bg-primary-foreground/10 hover:text-secondary border-l-4 border-transparent"
+                  ? "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground border-l-4 border-primary shadow-md"
+                  : "text-foreground hover:bg-background/20 hover:text-primary border-l-4 border-transparent"
               } transition-all duration-200 py-4 px-6 rounded-lg`}
             >
               <Link to="/settings" className="flex items-center gap-3 w-full">
@@ -369,7 +369,7 @@ export function AppSidebar() {
           <SidebarMenuItem>
             <SidebarMenuButton
               tooltip="Help & Support"
-              className="text-primary-foreground/90 hover:bg-primary-foreground/10 hover:text-secondary transition-all duration-200 py-4 px-6 rounded-lg"
+              className="text-foreground hover:bg-background/20 hover:text-primary transition-all duration-200 py-4 px-6 rounded-lg"
             >
               <HelpCircle className="h-5 w-5 flex-shrink-0" />
               {open && <span className="font-medium">Help & Support</span>}
