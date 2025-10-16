@@ -10,6 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, Upload, Clock } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import AddressPicker from "@/components/AddressPicker";
 
 const Auth = () => {
   const [mode, setMode] = useState<"choice" | "dentist" | "clinic" | "login">("choice");
@@ -31,6 +32,7 @@ const Auth = () => {
   const [materials, setMaterials] = useState<string[]>([]);
   const [chairCount, setChairCount] = useState("");
   const [address, setAddress] = useState("");
+  const [addressData, setAddressData] = useState<any>(null);
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [loading, setLoading] = useState(false);
   const [verificationPending, setVerificationPending] = useState(false);
@@ -61,6 +63,11 @@ const Auth = () => {
     // Validation
     if (!licenseNumber || !licensePhoto || !birthDate) {
       toast({ title: "Error", description: "License number, photo, and birth date are required for verification.", variant: "destructive" });
+      return;
+    }
+
+    if (!addressData || !addressData.street) {
+      toast({ title: "Error", description: "Please select your address on the map.", variant: "destructive" });
       return;
     }
     
@@ -106,6 +113,11 @@ const Auth = () => {
     // Validation
     if (!clinicLicenseNumber || !clinicLicensePhoto || !ownerLicensePhoto || !ownerBirthDate) {
       toast({ title: "Error", description: "All clinic verification documents are required.", variant: "destructive" });
+      return;
+    }
+
+    if (!addressData || !addressData.street) {
+      toast({ title: "Error", description: "Please select your clinic address on the map.", variant: "destructive" });
       return;
     }
     
@@ -241,10 +253,14 @@ const Auth = () => {
               </div>
               <div><Label>Birth Date *</Label><Input type="date" value={birthDate} onChange={(e) => setBirthDate(e.target.value)} required /></div>
               <div><Label>Clinic Name</Label><Input value={clinicName} onChange={(e) => setClinicName(e.target.value)} /></div>
-              <div className="grid grid-cols-2 gap-4">
-                <div><Label>City</Label><Input value={city} onChange={(e) => setCity(e.target.value)} /></div>
-                <div><Label>Country</Label><Input value={country} onChange={(e) => setCountry(e.target.value)} /></div>
-              </div>
+              <AddressPicker 
+                onAddressSelect={(addr) => {
+                  setAddressData(addr);
+                  setCity(addr.city);
+                  setCountry(addr.country);
+                  setAddress(addr.street);
+                }} 
+              />
               <div><Label>Email *</Label><Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required /></div>
               <div><Label>Phone</Label><Input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} /></div>
               <div><Label>Password *</Label><Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required /></div>
@@ -293,11 +309,14 @@ const Auth = () => {
                   </SelectContent>
                 </Select>
               </div>
-              <div><Label>Address</Label><Textarea value={address} onChange={(e) => setAddress(e.target.value)} rows={2} /></div>
-              <div className="grid grid-cols-2 gap-4">
-                <div><Label>City</Label><Input value={city} onChange={(e) => setCity(e.target.value)} /></div>
-                <div><Label>Country</Label><Input value={country} onChange={(e) => setCountry(e.target.value)} /></div>
-              </div>
+              <AddressPicker 
+                onAddressSelect={(addr) => {
+                  setAddressData(addr);
+                  setCity(addr.city);
+                  setCountry(addr.country);
+                  setAddress(addr.street);
+                }} 
+              />
               <div><Label>Contact Email *</Label><Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required /></div>
               <div><Label>Contact Phone</Label><Input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} /></div>
               <div><Label>Password *</Label><Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required /></div>

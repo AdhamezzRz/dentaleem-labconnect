@@ -4,7 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Search, CheckCircle2, MapPin, Clock, DollarSign, Star, Filter } from "lucide-react";
+import { Search, CheckCircle2, MapPin, Clock, DollarSign, Star, Filter, Crown } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const labs = [
@@ -18,9 +18,11 @@ const labs = [
     location: "Dubai, UAE",
     specialties: ["Zirconia", "E-max", "Implants"],
     verified: true,
+    goldCertified: true,
     featured: true,
     certifications: ["ISO 9001", "DAMAS"],
     cases: 450,
+    turnaroundDays: 11,
   },
   {
     id: 2,
@@ -32,9 +34,11 @@ const labs = [
     location: "Abu Dhabi, UAE",
     specialties: ["Veneers", "Full Arch", "E-max"],
     verified: true,
+    goldCertified: true,
     featured: true,
     certifications: ["ISO 13485", "CE"],
     cases: 380,
+    turnaroundDays: 9,
   },
   {
     id: 3,
@@ -46,9 +50,11 @@ const labs = [
     location: "Sharjah, UAE",
     specialties: ["Zirconia", "Metal Ceramic", "Temporary"],
     verified: true,
+    goldCertified: false,
     featured: false,
     certifications: ["ISO 9001"],
     cases: 620,
+    turnaroundDays: 13,
   },
   {
     id: 4,
@@ -60,9 +66,11 @@ const labs = [
     location: "Dubai, UAE",
     specialties: ["Digital Workflow", "E-max", "Zirconia"],
     verified: true,
+    goldCertified: true,
     featured: false,
     certifications: ["ISO 13485", "DAMAS"],
     cases: 290,
+    turnaroundDays: 8,
   },
   {
     id: 5,
@@ -74,9 +82,11 @@ const labs = [
     location: "Ajman, UAE",
     specialties: ["Crowns", "Bridges", "Implants"],
     verified: true,
+    goldCertified: false,
     featured: false,
     certifications: ["ISO 9001"],
     cases: 780,
+    turnaroundDays: 11,
   },
   {
     id: 6,
@@ -88,14 +98,17 @@ const labs = [
     location: "Dubai, UAE",
     specialties: ["Veneers", "E-max", "Aesthetic Cases"],
     verified: true,
+    goldCertified: true,
     featured: false,
     certifications: ["ISO 13485", "CE"],
     cases: 440,
+    turnaroundDays: 10,
   },
 ];
 
 const Marketplace = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [turnaroundFilter, setTurnaroundFilter] = useState("all");
 
   return (
     <div className="min-h-screen bg-background">
@@ -127,7 +140,7 @@ const Marketplace = () => {
 
         {/* Filters & Search */}
         <Card className="p-6 mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
             <div className="md:col-span-2 relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input 
@@ -147,6 +160,17 @@ const Marketplace = () => {
                 <SelectItem value="emax">E-max</SelectItem>
                 <SelectItem value="veneers">Veneers</SelectItem>
                 <SelectItem value="implants">Implants</SelectItem>
+              </SelectContent>
+            </Select>
+            <Select value={turnaroundFilter} onValueChange={setTurnaroundFilter}>
+              <SelectTrigger>
+                <SelectValue placeholder="Turnaround" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Turnaround</SelectItem>
+                <SelectItem value="1-3">1-3 Days</SelectItem>
+                <SelectItem value="4-7">4-7 Days</SelectItem>
+                <SelectItem value="8-plus">8+ Days</SelectItem>
               </SelectContent>
             </Select>
             <Select>
@@ -178,12 +202,13 @@ const Marketplace = () => {
                       {lab.name.split(' ').map(w => w[0]).join('').slice(0, 2)}
                     </span>
                   </div>
-                  {lab.verified && (
+                  {lab.goldCertified && (
                     <div 
-                      className="absolute -top-2 -right-2 bg-secondary text-white text-xs px-2 py-1 rounded-full font-medium shadow-md"
-                      title="This lab is certified and approved for international case handling"
+                      className="absolute -top-2 -right-2 bg-gradient-to-br from-yellow-500 to-yellow-600 text-white text-xs px-2.5 py-1 rounded-full font-bold shadow-lg flex items-center gap-1 border border-yellow-400/30"
+                      title="Gold Certified — Dentaleem-approved lab compliant with international policies and export standards"
                     >
-                      Verified
+                      <Crown className="h-3 w-3" />
+                      GOLD
                     </div>
                   )}
                 </div>
@@ -194,8 +219,11 @@ const Marketplace = () => {
                     <div>
                       <div className="flex items-center gap-2 mb-2">
                         <h3 className="text-xl font-semibold text-foreground">{lab.name}</h3>
-                        {lab.verified && (
-                          <CheckCircle2 className="h-5 w-5 text-secondary" />
+                        {lab.goldCertified && (
+                          <Badge className="bg-gradient-to-br from-yellow-500 to-yellow-600 text-white border-yellow-400/30 shadow-md">
+                            <Crown className="h-3 w-3 mr-1" />
+                            Gold Certified
+                          </Badge>
                         )}
                         {lab.featured && (
                           <Badge className="bg-secondary/10 text-secondary border-secondary/20">Featured</Badge>
@@ -229,8 +257,8 @@ const Marketplace = () => {
                     <div className="flex items-center gap-2">
                       <Clock className="h-4 w-4 text-muted-foreground" />
                       <div>
-                        <p className="text-xs text-muted-foreground">Turnaround</p>
-                        <p className="text-sm font-medium text-foreground">{lab.turnaround}</p>
+                        <p className="text-xs text-muted-foreground">Avg. Turnaround</p>
+                        <p className="text-sm font-medium text-foreground">{lab.turnaroundDays} Days</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">

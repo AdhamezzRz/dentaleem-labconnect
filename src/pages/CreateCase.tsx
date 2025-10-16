@@ -29,6 +29,7 @@ interface UploadedFile {
 const CreateCase = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [patientName, setPatientName] = useState("");
+  const [internalPatientId, setInternalPatientId] = useState("");
   const [patientType, setPatientType] = useState<"adult" | "pediatric">("adult");
   const [restorations, setRestorations] = useState<Restoration[]>([
     { id: "1", type: "", teeth: [], material: "", shade: "", notes: "" }
@@ -104,9 +105,13 @@ const CreateCase = () => {
   };
 
   const handleFileUpload = (type: string) => {
-    // Mock file upload
+    // Mock file upload with internal ID
+    const fileName = internalPatientId 
+      ? `${type}_${internalPatientId}_${Date.now()}.stl`
+      : `${type}_${Date.now()}.stl`;
+    
     setUploadedFiles([...uploadedFiles, { 
-      name: `File_${Date.now()}.stl`, 
+      name: fileName, 
       type, 
       patientName 
     }]);
@@ -215,31 +220,44 @@ const CreateCase = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label>Patient Type *</Label>
-                  <div className="flex gap-4 pt-2">
-                    <button
-                      type="button"
-                      onClick={() => setPatientType("adult")}
-                      className={`flex-1 p-3 rounded-lg border-2 transition-all ${
-                        patientType === "adult" 
-                          ? "border-primary bg-primary/5" 
-                          : "border-border hover:border-primary/50"
-                      }`}
-                    >
-                      <span className="font-medium text-foreground">Adult</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setPatientType("pediatric")}
-                      className={`flex-1 p-3 rounded-lg border-2 transition-all ${
-                        patientType === "pediatric" 
-                          ? "border-primary bg-primary/5" 
-                          : "border-border hover:border-primary/50"
-                      }`}
-                    >
-                      <span className="font-medium text-foreground">Pediatric</span>
-                    </button>
-                  </div>
+                  <Label htmlFor="internalId">Internal Patient ID</Label>
+                  <Input 
+                    id="internalId" 
+                    value={internalPatientId}
+                    onChange={(e) => setInternalPatientId(e.target.value)}
+                    placeholder="e.g., P-2148" 
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    Enter your clinic's internal ID for this patient
+                  </p>
+                </div>
+              </div>
+              
+              <div className="space-y-2">
+                <Label>Patient Type *</Label>
+                <div className="flex gap-4">
+                  <button
+                    type="button"
+                    onClick={() => setPatientType("adult")}
+                    className={`flex-1 p-3 rounded-lg border-2 transition-all ${
+                      patientType === "adult" 
+                        ? "border-primary bg-primary/5" 
+                        : "border-border hover:border-primary/50"
+                    }`}
+                  >
+                    <span className="font-medium text-foreground">Adult</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPatientType("pediatric")}
+                    className={`flex-1 p-3 rounded-lg border-2 transition-all ${
+                      patientType === "pediatric" 
+                        ? "border-primary bg-primary/5" 
+                        : "border-border hover:border-primary/50"
+                    }`}
+                  >
+                    <span className="font-medium text-foreground">Pediatric</span>
+                  </button>
                 </div>
               </div>
 

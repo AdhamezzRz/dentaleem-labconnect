@@ -139,11 +139,18 @@ const CaseDetail = () => {
             <h1 className="text-3xl font-bold text-foreground mb-2">
               Case Details
             </h1>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 flex-wrap">
+              <p className="text-lg font-medium text-foreground">
+                Patient: {caseData?.patient_initials || "Sarah Mohamed"}
+              </p>
+              <span className="text-muted-foreground">|</span>
               <p className="text-muted-foreground">
-                Patient: {caseData?.patient_initials}
+                ID: P-2148
               </p>
               <Badge variant="outline">Adult</Badge>
+              <Badge variant="outline" className="capitalize">
+                {caseData?.case_type || "Crown & Veneer Case"}
+              </Badge>
             </div>
           </div>
           <Badge className={getStatusColor(caseData?.status)}>
@@ -241,7 +248,14 @@ const CaseDetail = () => {
               </h2>
               <div className="space-y-3">
                 <div>
-                  <p className="font-medium text-foreground">{lab.name}</p>
+                  <div className="flex items-center gap-2 mb-2">
+                    <p className="font-medium text-foreground">{lab.name}</p>
+                    {lab.is_verified && (
+                      <Badge className="bg-gradient-to-br from-yellow-500 to-yellow-600 text-white border-yellow-400/30 shadow-md text-xs">
+                        GOLD
+                      </Badge>
+                    )}
+                  </div>
                   <p className="text-sm text-muted-foreground">
                     ⭐ {lab.rating} ({lab.total_reviews} reviews)
                   </p>
