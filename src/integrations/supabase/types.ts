@@ -14,6 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
+      case_assignments: {
+        Row: {
+          assigned_at: string | null
+          case_id: string
+          completed_at: string | null
+          id: string
+          notes: string | null
+          staff_id: string
+          task_type: string
+        }
+        Insert: {
+          assigned_at?: string | null
+          case_id: string
+          completed_at?: string | null
+          id?: string
+          notes?: string | null
+          staff_id: string
+          task_type: string
+        }
+        Update: {
+          assigned_at?: string | null
+          case_id?: string
+          completed_at?: string | null
+          id?: string
+          notes?: string | null
+          staff_id?: string
+          task_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "case_assignments_case_id_fkey"
+            columns: ["case_id"]
+            isOneToOne: false
+            referencedRelation: "cases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "case_assignments_staff_id_fkey"
+            columns: ["staff_id"]
+            isOneToOne: false
+            referencedRelation: "lab_staff"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       case_files: {
         Row: {
           case_id: string
@@ -48,6 +93,51 @@ export type Database = {
             columns: ["case_id"]
             isOneToOne: false
             referencedRelation: "cases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      case_stages: {
+        Row: {
+          case_id: string
+          completed_at: string | null
+          completed_by: string | null
+          id: string
+          notes: string | null
+          stage: Database["public"]["Enums"]["case_stage"]
+          started_at: string | null
+        }
+        Insert: {
+          case_id: string
+          completed_at?: string | null
+          completed_by?: string | null
+          id?: string
+          notes?: string | null
+          stage: Database["public"]["Enums"]["case_stage"]
+          started_at?: string | null
+        }
+        Update: {
+          case_id?: string
+          completed_at?: string | null
+          completed_by?: string | null
+          id?: string
+          notes?: string | null
+          stage?: Database["public"]["Enums"]["case_stage"]
+          started_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "case_stages_case_id_fkey"
+            columns: ["case_id"]
+            isOneToOne: false
+            referencedRelation: "cases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "case_stages_completed_by_fkey"
+            columns: ["completed_by"]
+            isOneToOne: false
+            referencedRelation: "lab_staff"
             referencedColumns: ["id"]
           },
         ]
@@ -91,6 +181,7 @@ export type Database = {
         Row: {
           case_type: Database["public"]["Enums"]["case_type"]
           created_at: string | null
+          current_stage: Database["public"]["Enums"]["case_stage"] | null
           dentist_id: string
           due_date: string | null
           id: string
@@ -106,6 +197,7 @@ export type Database = {
         Insert: {
           case_type: Database["public"]["Enums"]["case_type"]
           created_at?: string | null
+          current_stage?: Database["public"]["Enums"]["case_stage"] | null
           dentist_id: string
           due_date?: string | null
           id?: string
@@ -121,6 +213,7 @@ export type Database = {
         Update: {
           case_type?: Database["public"]["Enums"]["case_type"]
           created_at?: string | null
+          current_stage?: Database["public"]["Enums"]["case_stage"] | null
           dentist_id?: string
           due_date?: string | null
           id?: string
@@ -136,6 +229,163 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "cases_lab_id_fkey"
+            columns: ["lab_id"]
+            isOneToOne: false
+            referencedRelation: "labs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      delivery_tracking: {
+        Row: {
+          airway_bill_url: string | null
+          case_id: string
+          courier_name: string | null
+          created_at: string | null
+          delivered_at: string | null
+          id: string
+          notes: string | null
+          proof_of_shipment_url: string | null
+          shipped_at: string | null
+          status: string | null
+          tracking_number: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          airway_bill_url?: string | null
+          case_id: string
+          courier_name?: string | null
+          created_at?: string | null
+          delivered_at?: string | null
+          id?: string
+          notes?: string | null
+          proof_of_shipment_url?: string | null
+          shipped_at?: string | null
+          status?: string | null
+          tracking_number?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          airway_bill_url?: string | null
+          case_id?: string
+          courier_name?: string | null
+          created_at?: string | null
+          delivered_at?: string | null
+          id?: string
+          notes?: string | null
+          proof_of_shipment_url?: string | null
+          shipped_at?: string | null
+          status?: string | null
+          tracking_number?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delivery_tracking_case_id_fkey"
+            columns: ["case_id"]
+            isOneToOne: false
+            referencedRelation: "cases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lab_financials: {
+        Row: {
+          amount: number
+          case_id: string | null
+          created_at: string | null
+          id: string
+          invoice_url: string | null
+          lab_id: string
+          notes: string | null
+          payment_method: string | null
+          status: string | null
+          transaction_date: string | null
+          transaction_type: string
+        }
+        Insert: {
+          amount: number
+          case_id?: string | null
+          created_at?: string | null
+          id?: string
+          invoice_url?: string | null
+          lab_id: string
+          notes?: string | null
+          payment_method?: string | null
+          status?: string | null
+          transaction_date?: string | null
+          transaction_type: string
+        }
+        Update: {
+          amount?: number
+          case_id?: string | null
+          created_at?: string | null
+          id?: string
+          invoice_url?: string | null
+          lab_id?: string
+          notes?: string | null
+          payment_method?: string | null
+          status?: string | null
+          transaction_date?: string | null
+          transaction_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lab_financials_case_id_fkey"
+            columns: ["case_id"]
+            isOneToOne: false
+            referencedRelation: "cases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lab_financials_lab_id_fkey"
+            columns: ["lab_id"]
+            isOneToOne: false
+            referencedRelation: "labs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lab_staff: {
+        Row: {
+          created_at: string | null
+          email: string | null
+          id: string
+          is_active: boolean | null
+          lab_id: string
+          name: string
+          phone: string | null
+          role: Database["public"]["Enums"]["lab_staff_role"]
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email?: string | null
+          id?: string
+          is_active?: boolean | null
+          lab_id: string
+          name: string
+          phone?: string | null
+          role: Database["public"]["Enums"]["lab_staff_role"]
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string | null
+          id?: string
+          is_active?: boolean | null
+          lab_id?: string
+          name?: string
+          phone?: string | null
+          role?: Database["public"]["Enums"]["lab_staff_role"]
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lab_staff_lab_id_fkey"
             columns: ["lab_id"]
             isOneToOne: false
             referencedRelation: "labs"
@@ -280,6 +530,117 @@ export type Database = {
         }
         Relationships: []
       }
+      qc_records: {
+        Row: {
+          case_id: string
+          created_at: string | null
+          fit_accuracy: boolean | null
+          id: string
+          inspector_id: string | null
+          margins_checked: boolean | null
+          notes: string | null
+          photo_url: string | null
+          shade_match: boolean | null
+          status: Database["public"]["Enums"]["qc_status"]
+          surface_finish: boolean | null
+          updated_at: string | null
+        }
+        Insert: {
+          case_id: string
+          created_at?: string | null
+          fit_accuracy?: boolean | null
+          id?: string
+          inspector_id?: string | null
+          margins_checked?: boolean | null
+          notes?: string | null
+          photo_url?: string | null
+          shade_match?: boolean | null
+          status?: Database["public"]["Enums"]["qc_status"]
+          surface_finish?: boolean | null
+          updated_at?: string | null
+        }
+        Update: {
+          case_id?: string
+          created_at?: string | null
+          fit_accuracy?: boolean | null
+          id?: string
+          inspector_id?: string | null
+          margins_checked?: boolean | null
+          notes?: string | null
+          photo_url?: string | null
+          shade_match?: boolean | null
+          status?: Database["public"]["Enums"]["qc_status"]
+          surface_finish?: boolean | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "qc_records_case_id_fkey"
+            columns: ["case_id"]
+            isOneToOne: false
+            referencedRelation: "cases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "qc_records_inspector_id_fkey"
+            columns: ["inspector_id"]
+            isOneToOne: false
+            referencedRelation: "lab_staff"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      remakes: {
+        Row: {
+          approved_by: string | null
+          created_at: string | null
+          fault_party: string | null
+          id: string
+          original_case_id: string
+          reason: string
+          remake_case_id: string | null
+          resolution_notes: string | null
+          resolved_at: string | null
+        }
+        Insert: {
+          approved_by?: string | null
+          created_at?: string | null
+          fault_party?: string | null
+          id?: string
+          original_case_id: string
+          reason: string
+          remake_case_id?: string | null
+          resolution_notes?: string | null
+          resolved_at?: string | null
+        }
+        Update: {
+          approved_by?: string | null
+          created_at?: string | null
+          fault_party?: string | null
+          id?: string
+          original_case_id?: string
+          reason?: string
+          remake_case_id?: string | null
+          resolution_notes?: string | null
+          resolved_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "remakes_original_case_id_fkey"
+            columns: ["original_case_id"]
+            isOneToOne: false
+            referencedRelation: "cases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "remakes_remake_case_id_fkey"
+            columns: ["remake_case_id"]
+            isOneToOne: false
+            referencedRelation: "cases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       reviews: {
         Row: {
           case_id: string
@@ -361,6 +722,7 @@ export type Database = {
     }
     Enums: {
       app_role: "dentist" | "lab" | "admin"
+      case_stage: "new" | "design" | "production" | "qc" | "delivery"
       case_status:
         | "draft"
         | "pending_payment"
@@ -378,6 +740,13 @@ export type Database = {
         | "denture"
         | "aligner"
         | "other"
+      lab_staff_role:
+        | "designer"
+        | "ceramist"
+        | "qc_manager"
+        | "courier_manager"
+        | "admin"
+      qc_status: "pending" | "passed" | "failed"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -506,6 +875,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["dentist", "lab", "admin"],
+      case_stage: ["new", "design", "production", "qc", "delivery"],
       case_status: [
         "draft",
         "pending_payment",
@@ -525,6 +895,14 @@ export const Constants = {
         "aligner",
         "other",
       ],
+      lab_staff_role: [
+        "designer",
+        "ceramist",
+        "qc_manager",
+        "courier_manager",
+        "admin",
+      ],
+      qc_status: ["pending", "passed", "failed"],
     },
   },
 } as const
