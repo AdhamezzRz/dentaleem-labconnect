@@ -85,9 +85,16 @@ const Dashboard = () => {
   const getProgressColor = (progress: number) => {
     if (progress < 30) return "bg-muted"; // Draft
     if (progress < 50) return "bg-primary"; // Design
-    if (progress < 80) return "bg-secondary"; // Production
-    if (progress < 100) return "bg-amber-500"; // Delivery
-    return "bg-emerald-500"; // Complete
+    if (progress < 80) return "bg-accent"; // Production
+    if (progress < 100) return "bg-amber-500"; // Delivery - Gold for shipping
+    return "bg-primary"; // Complete - Dark green
+  };
+
+  const getStatusBadgeColor = (status: string) => {
+    if (status.includes("Design")) return "bg-primary/10 text-primary border-primary/20";
+    if (status.includes("Production")) return "bg-accent/20 text-accent-foreground border-accent/30";
+    if (status.includes("Delivery")) return "bg-amber-100 text-amber-800 border-amber-200";
+    return "bg-muted text-muted-foreground border-border";
   };
 
   return (
