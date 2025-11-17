@@ -251,8 +251,8 @@ const Marketplace = () => {
           </BreadcrumbList>
         </Breadcrumb>
 
-        {/* Header */}
-        <div className="mb-8">
+        {/* Header with Gradient */}
+        <div className="mb-8 bg-gradient-to-br from-card to-primary/5 p-6 rounded-xl border border-border/50 sticky top-16 z-10 backdrop-blur-md shadow-sm">
           <h1 className="text-3xl font-bold text-foreground mb-2">Discover Dental Labs</h1>
           <p className="text-muted-foreground">
             Find the perfect lab for your restorations — verified, rated, and ready to deliver.
@@ -268,20 +268,20 @@ const Marketplace = () => {
           onStatClick={handleStatClick}
         />
 
-        {/* Search & Sort Bar */}
+        {/* Enhanced Search & Sort Bar */}
         <Card className="p-4 mb-6">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
               <Input
                 placeholder="Search labs by name, city, or specialization..."
-                className="pl-10"
+                className="pl-10 h-11 border-border focus:border-primary transition-colors"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
             <Select value={sortBy} onValueChange={handleSort}>
-              <SelectTrigger className="w-full md:w-[200px]">
+              <SelectTrigger className="w-full md:w-[200px] h-11 border-border">
                 <SelectValue placeholder="Sort By" />
               </SelectTrigger>
               <SelectContent>
@@ -329,15 +329,21 @@ const Marketplace = () => {
               </p>
             </div>
 
+            {/* Enhanced Labs Grid with Animations */}
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {filteredLabs.map((lab) => (
-                <LabCard
+              {filteredLabs.map((lab, index) => (
+                <div 
                   key={lab.id}
-                  lab={lab}
-                  onViewProfile={handleViewProfile}
-                  onStartCase={handleStartCase}
-                  onContact={handleContact}
-                />
+                  className="animate-fade-in"
+                  style={{ animationDelay: `${index * 50}ms` }}
+                >
+                  <LabCard
+                    lab={lab}
+                    onViewProfile={handleViewProfile}
+                    onStartCase={handleStartCase}
+                    onContact={handleContact}
+                  />
+                </div>
               ))}
             </div>
 
@@ -350,17 +356,17 @@ const Marketplace = () => {
               </div>
             )}
 
-            {/* Empty State */}
+            {/* Enhanced Empty State */}
             {filteredLabs.length === 0 && (
-              <Card className="p-12 text-center">
+              <Card className="p-12 text-center border-dashed border-2 border-muted-foreground/30 animate-fade-in">
                 <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
                   <Search className="h-8 w-8 text-muted-foreground" />
                 </div>
                 <h3 className="text-lg font-semibold text-foreground mb-2">No labs found</h3>
-                <p className="text-muted-foreground mb-4">
+                <p className="text-muted-foreground mb-6">
                   Try adjusting your filters or search terms
                 </p>
-                <Button onClick={handleResetFilters} variant="outline">
+                <Button onClick={handleResetFilters} variant="outline" className="min-w-[140px]">
                   Reset Filters
                 </Button>
               </Card>
