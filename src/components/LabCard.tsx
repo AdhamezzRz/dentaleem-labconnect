@@ -31,13 +31,16 @@ const LabCard = ({ lab, onViewProfile, onStartCase, onContact }: LabCardProps) =
 
   return (
     <Card 
-      className={`group hover:shadow-xl transition-all duration-300 overflow-hidden ${
+      className={`group relative hover:shadow-2xl transition-all duration-300 overflow-hidden ${
         lab.featured ? 'border-primary/50 shadow-lg' : ''
       }`}
     >
+      {/* Hover Gradient Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-0" />
+      
       {/* Gold Certified Banner */}
       {lab.goldCertified && (
-        <div className="bg-gradient-to-r from-yellow-500 to-yellow-600 py-1.5 px-4 flex items-center justify-center gap-2">
+        <div className="relative bg-gradient-to-r from-yellow-400 to-yellow-500 py-1.5 px-4 flex items-center justify-center gap-2 animate-pulse">
           <Crown className="h-3.5 w-3.5 text-white" />
           <span className="text-xs font-bold text-white uppercase tracking-wide">
             Gold Certified
@@ -45,12 +48,12 @@ const LabCard = ({ lab, onViewProfile, onStartCase, onContact }: LabCardProps) =
         </div>
       )}
 
-      <div className="p-6">
+      <div className="p-6 relative z-10">
         {/* Lab Avatar & Info */}
         <div className="flex items-start gap-4 mb-4">
-          {/* Lab Logo */}
+          {/* Lab Logo with Enhanced Shadow */}
           <div className="flex-shrink-0 relative">
-            <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center shadow-md">
+            <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center shadow-lg group-hover:shadow-xl group-hover:scale-105 transition-all duration-300">
               <span className="text-xl font-bold text-white">
                 {lab.name.split(' ').map(w => w[0]).join('').slice(0, 2)}
               </span>
@@ -60,7 +63,7 @@ const LabCard = ({ lab, onViewProfile, onStartCase, onContact }: LabCardProps) =
           {/* Lab Name & Location */}
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-2 mb-1">
-              <h3 className="text-lg font-semibold text-foreground truncate">
+              <h3 className="text-lg font-semibold text-foreground truncate group-hover:text-primary transition-colors">
                 {lab.name}
               </h3>
               <button
@@ -118,8 +121,10 @@ const LabCard = ({ lab, onViewProfile, onStartCase, onContact }: LabCardProps) =
 
         {/* Stats Grid */}
         <div className="grid grid-cols-2 gap-3 mb-4 p-3 bg-muted/30 rounded-lg">
-          <div className="flex items-center gap-2">
-            <Clock className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+          <div className="flex items-center gap-2 group/info">
+            <div className="p-2 rounded-lg bg-primary/10 group-hover/info:bg-primary/20 transition-colors">
+              <Clock className="h-4 w-4 text-primary" />
+            </div>
             <div className="min-w-0">
               <p className="text-xs text-muted-foreground">Turnaround</p>
               <p className="text-sm font-semibold text-foreground truncate">
@@ -127,8 +132,10 @@ const LabCard = ({ lab, onViewProfile, onStartCase, onContact }: LabCardProps) =
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <DollarSign className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+          <div className="flex items-center gap-2 group/info">
+            <div className="p-2 rounded-lg bg-accent/10 group-hover/info:bg-accent/20 transition-colors">
+              <DollarSign className="h-4 w-4 text-accent-foreground" />
+            </div>
             <div className="min-w-0">
               <p className="text-xs text-muted-foreground">From</p>
               <p className="text-sm font-semibold text-foreground truncate">
@@ -151,25 +158,25 @@ const LabCard = ({ lab, onViewProfile, onStartCase, onContact }: LabCardProps) =
         {/* Action Buttons */}
         <div className="flex gap-2">
           <Button 
-            onClick={() => onViewProfile(lab.id)}
-            className="flex-1 bg-primary hover:bg-primary/90"
-            size="sm"
-          >
-            View Profile
-          </Button>
-          <Button 
             onClick={() => onStartCase(lab.id)}
-            variant="outline"
-            className="flex-1 border-secondary text-secondary hover:bg-secondary/10"
+            className="flex-1 bg-gradient-to-r from-secondary to-secondary/90 hover:from-secondary/90 hover:to-secondary/80 shadow-md hover:shadow-lg transition-all"
             size="sm"
           >
             Start Case
           </Button>
+          <Button 
+            onClick={() => onViewProfile(lab.id)}
+            variant="outline"
+            className="flex-1 border-primary/30 hover:bg-primary/5 hover:border-primary/50"
+            size="sm"
+          >
+            Profile
+          </Button>
           <Button
             onClick={() => onContact(lab.id)}
-            variant="ghost"
+            variant="outline"
             size="sm"
-            className="px-3"
+            className="px-3 border-accent/30 hover:bg-accent/5 hover:border-accent/50"
           >
             <MessageCircle className="h-4 w-4" />
           </Button>
