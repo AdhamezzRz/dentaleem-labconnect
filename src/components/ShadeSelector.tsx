@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
@@ -28,19 +28,22 @@ const vita3DMaster = [
 
 const ShadeSelector = ({ value, onChange, stumpNote = "" }: ShadeSelectorProps) => {
   const [library, setLibrary] = useState<"classical" | "3dmaster">("classical");
-  const [selectedShade, setSelectedShade] = useState(value);
   const [note, setNote] = useState(stumpNote);
+
+  // Sync note state with prop changes
+  useEffect(() => {
+    setNote(stumpNote);
+  }, [stumpNote]);
 
   const shadeList = library === "classical" ? vitaClassical : vita3DMaster;
 
   const handleShadeSelect = (shade: string) => {
-    setSelectedShade(shade);
     onChange(shade, note);
   };
 
   const handleNoteChange = (newNote: string) => {
     setNote(newNote);
-    onChange(selectedShade, newNote);
+    onChange(value, newNote);
   };
 
   return (
@@ -63,7 +66,7 @@ const ShadeSelector = ({ value, onChange, stumpNote = "" }: ShadeSelectorProps) 
 
       <div className="space-y-2">
         <Label>Select Shade *</Label>
-        <Select value={selectedShade} onValueChange={handleShadeSelect}>
+        <Select value={value} onValueChange={handleShadeSelect}>
           <SelectTrigger>
             <SelectValue placeholder="Select a shade" />
           </SelectTrigger>
