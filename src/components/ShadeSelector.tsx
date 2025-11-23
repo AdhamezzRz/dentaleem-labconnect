@@ -27,9 +27,14 @@ const vita3DMaster = [
 ];
 
 const ShadeSelector = ({ value, onChange, stumpNote = "" }: ShadeSelectorProps) => {
+  const [selectedShade, setSelectedShade] = useState(value);
   const [note, setNote] = useState(stumpNote);
 
-  // Sync note state with prop changes
+  // Keep internal state in sync with parent
+  useEffect(() => {
+    setSelectedShade(value);
+  }, [value]);
+
   useEffect(() => {
     setNote(stumpNote);
   }, [stumpNote]);
@@ -38,12 +43,13 @@ const ShadeSelector = ({ value, onChange, stumpNote = "" }: ShadeSelectorProps) 
   const shadeList = [...vitaClassical, ...vita3DMaster];
 
   const handleShadeSelect = (shade: string) => {
+    setSelectedShade(shade);
     onChange(shade, note);
   };
 
   const handleNoteChange = (newNote: string) => {
     setNote(newNote);
-    onChange(value, newNote);
+    onChange(selectedShade, newNote);
   };
 
   return (
@@ -57,7 +63,7 @@ const ShadeSelector = ({ value, onChange, stumpNote = "" }: ShadeSelectorProps) 
 
       <div className="space-y-2">
         <Label>Select Shade *</Label>
-        <Select defaultValue={value} onValueChange={handleShadeSelect}>
+        <Select value={selectedShade} onValueChange={handleShadeSelect}>
           <SelectTrigger>
             <SelectValue placeholder="Select a shade" />
           </SelectTrigger>
