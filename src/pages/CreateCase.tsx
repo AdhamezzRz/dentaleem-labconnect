@@ -9,15 +9,17 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { ArrowLeft, ArrowRight, Upload, CheckCircle2, Plus, X, AlertCircle, Save } from "lucide-react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
-import TeethChart from "@/components/TeethChart";
+import TeethChartInteractive from "@/components/TeethChartInteractive";
+import ShadeSelector from "@/components/ShadeSelector";
 import AddCreditCardModal from "@/components/AddCreditCardModal";
 
 interface Restoration {
   id: string;
   type: string;
-  teeth: number[];
+  teeth: string[]; // Now using alphabetical notation (UR1, UL2, etc.)
   material: string;
   shade: string;
+  shadeNote?: string; // For stump shade and characterization
   notes: string;
   hasTryIn: boolean;
   isTryIn?: boolean;
@@ -455,7 +457,7 @@ const CreateCase = () => {
 
                         <div className="space-y-2">
                           <Label>Select Teeth *</Label>
-                          <TeethChart
+                          <TeethChartInteractive
                             selectedTeeth={restoration.teeth}
                             onTeethChange={(teeth) => updateRestoration(restoration.id, "teeth", teeth)}
                           />
@@ -556,24 +558,16 @@ const CreateCase = () => {
                     ))}
                   </div>
 
-                  <div className="space-y-2">
-                    <Label>Shade Selection *</Label>
-                    <Select 
-                      value={restoration.shade}
-                      onValueChange={(value) => updateRestoration(restoration.id, "shade", value)}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select shade" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="a1">A1</SelectItem>
-                        <SelectItem value="a2">A2</SelectItem>
-                        <SelectItem value="a3">A3</SelectItem>
-                        <SelectItem value="b1">B1</SelectItem>
-                        <SelectItem value="custom">Custom Match</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+                  <ShadeSelector
+                    value={restoration.shade}
+                    onChange={(shade, stumpNote) => {
+                      updateRestoration(restoration.id, "shade", shade);
+                      if (stumpNote !== undefined) {
+                        updateRestoration(restoration.id, "shadeNote", stumpNote);
+                      }
+                    }}
+                    stumpNote={restoration.shadeNote}
+                  />
                 </Card>
               ))}
             </div>
@@ -958,8 +952,11 @@ const CreateCase = () => {
                     onClick={() => handlePaymentSelect("split")}
                   >
                     <p className="font-medium text-foreground">Split Payment</p>
-                    <p className="text-sm text-muted-foreground">50% now, 50% on delivery</p>
+                    <p className="text-sm text-muted-foreground">30% now, 70% on delivery</p>
                     <p className="text-xs text-muted-foreground mt-2">
+                      30% now to start; 70% released on confirmed delivery
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-1">
                       {hasSavedCard ? "✓ Card saved" : "Requires saved credit card"}
                     </p>
                   </Card>
@@ -971,9 +968,29 @@ const CreateCase = () => {
                   <AlertCircle className="h-5 w-5 text-secondary flex-shrink-0 mt-0.5" />
                   <div className="text-sm">
                     <p className="font-medium text-foreground">Credit card required</p>
-                    <p className="text-muted-foreground">A saved credit card is required for split payments to enable automatic second charge.</p>
+                    <p className="text-muted-foreground">A saved credit card is required for split payments (30% now, 70% auto-capture on delivery confirmation).</p>
                   </div>
                 </div>
+              )}
+
+              {paymentOption === "split" && (
+                <Card className="p-4 bg-muted/20">
+                  <h4 className="text-sm font-medium text-foreground mb-3">Split Payment Breakdown</h4>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Deposit (30% now)</span>
+                      <span className="font-medium text-foreground">${(discountedPrice * 0.3).toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Balance (70% on delivery)</span>
+                      <span className="font-medium text-foreground">${(discountedPrice * 0.7).toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between pt-2 border-t border-border">
+                      <span className="font-semibold text-foreground">Total</span>
+                      <span className="font-bold text-primary">${discountedPrice.toFixed(2)}</span>
+                    </div>
+                  </div>
+                </Card>
               )}
             </div>
           )}
