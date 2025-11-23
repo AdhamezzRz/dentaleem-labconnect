@@ -27,7 +27,6 @@ const vita3DMaster = [
 ];
 
 const ShadeSelector = ({ value, onChange, stumpNote = "" }: ShadeSelectorProps) => {
-  const [library, setLibrary] = useState<"classical" | "3dmaster">("classical");
   const [note, setNote] = useState(stumpNote);
 
   // Sync note state with prop changes
@@ -35,7 +34,8 @@ const ShadeSelector = ({ value, onChange, stumpNote = "" }: ShadeSelectorProps) 
     setNote(stumpNote);
   }, [stumpNote]);
 
-  const shadeList = library === "classical" ? vitaClassical : vita3DMaster;
+  // Single combined VITA shade list (Classical + 3D-Master)
+  const shadeList = [...vitaClassical, ...vita3DMaster];
 
   const handleShadeSelect = (shade: string) => {
     onChange(shade, note);
@@ -48,19 +48,10 @@ const ShadeSelector = ({ value, onChange, stumpNote = "" }: ShadeSelectorProps) 
 
   return (
     <div className="space-y-4">
-      <div className="space-y-2">
-        <Label>Porcelain Shade Library *</Label>
-        <Select value={library} onValueChange={(val: "classical" | "3dmaster") => setLibrary(val)}>
-          <SelectTrigger>
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="classical">VITA Classical (A1-D4)</SelectItem>
-            <SelectItem value="3dmaster">VITA 3D-Master</SelectItem>
-          </SelectContent>
-        </Select>
+      <div className="space-y-1">
+        <Label>Porcelain Shade (VITA) *</Label>
         <p className="text-xs text-muted-foreground">
-          Select porcelain shade; add stump shade if needed
+          Single VITA shade list (Classical + 3D-Master)
         </p>
       </div>
 
