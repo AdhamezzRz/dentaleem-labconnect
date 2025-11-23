@@ -4,17 +4,46 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { CheckCircle2, X } from "lucide-react";
+import { CheckCircle2, X, Info } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 const specialtiesList = [
-  "Prosthodontics",
-  "Orthodontics",
-  "Endodontics",
-  "Implantology",
-  "Cosmetic Dentistry",
-  "Oral Surgery",
-  "Pediatric Dentistry",
-  "Periodontics",
+  { 
+    name: "General", 
+    examples: ["Check-ups", "Composite fillings", "Simple crowns"] 
+  },
+  { 
+    name: "Prosthodontics", 
+    examples: ["Zirconia/Emax crowns & bridges", "Full dentures", "Onlays"] 
+  },
+  { 
+    name: "Orthodontics", 
+    examples: ["Clear aligners", "Fixed appliances", "Retainers"] 
+  },
+  { 
+    name: "Implantology", 
+    examples: ["Single implant crowns", "Multi-unit prostheses", "Screw-retained"] 
+  },
+  { 
+    name: "Cosmetic", 
+    examples: ["Veneers", "Smile design", "Bleach trays"] 
+  },
+  { 
+    name: "Oral Surgery", 
+    examples: ["Surgical guides", "Immediate provisional restorations"] 
+  },
+  { 
+    name: "Pediatric", 
+    examples: ["SSCs", "Space maintainers", "Pediatric crowns"] 
+  },
+  { 
+    name: "Endodontics", 
+    examples: ["Root canal treatment", "Retreatment", "Apical surgery"] 
+  },
+  { 
+    name: "Periodontics", 
+    examples: ["Gum disease treatment", "Scaling & root planing"] 
+  },
 ];
 
 const materialsList = [
@@ -36,11 +65,11 @@ const Onboarding = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const toggleSpecialty = (specialty: string) => {
+  const toggleSpecialty = (specialtyName: string) => {
     setSelectedSpecialties(prev => 
-      prev.includes(specialty) 
-        ? prev.filter(s => s !== specialty)
-        : [...prev, specialty]
+      prev.includes(specialtyName) 
+        ? prev.filter(s => s !== specialtyName)
+        : [...prev, specialtyName]
     );
   };
 
@@ -130,26 +159,56 @@ const Onboarding = () => {
         {/* Step 1 - Specialties */}
         {step === 1 && (
           <div className="space-y-6">
-            <h2 className="text-xl font-semibold text-foreground">
-              Select Your Specialties
-            </h2>
-            <p className="text-sm text-muted-foreground">Choose all that apply</p>
+            <div>
+              <h2 className="text-xl font-semibold text-foreground">
+                Select Your Specialties
+              </h2>
+              <p className="text-sm text-muted-foreground mb-1">Choose all that apply</p>
+              <p className="text-xs text-muted-foreground">
+                Choosing specialties helps Dentaleem recommend the right labs & defaults.
+              </p>
+            </div>
             
             <div className="grid grid-cols-2 gap-3">
               {specialtiesList.map((specialty) => (
                 <button
-                  key={specialty}
+                  key={specialty.name}
                   type="button"
-                  onClick={() => toggleSpecialty(specialty)}
+                  onClick={() => toggleSpecialty(specialty.name)}
                   className={`p-4 rounded-lg border-2 text-left transition-all ${
-                    selectedSpecialties.includes(specialty)
+                    selectedSpecialties.includes(specialty.name)
                       ? "border-primary bg-primary/5"
                       : "border-border hover:border-primary/50"
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-medium text-foreground">{specialty}</span>
-                    {selectedSpecialties.includes(specialty) && (
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium text-foreground">{specialty.name}</span>
+                      <Popover>
+                        <PopoverTrigger asChild onClick={(e) => e.stopPropagation()}>
+                          <button 
+                            type="button"
+                            className="text-muted-foreground hover:text-primary transition-colors"
+                          >
+                            <Info className="h-4 w-4" />
+                          </button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-64 p-3" side="top">
+                          <div className="space-y-2">
+                            <p className="text-xs font-semibold text-foreground">Example cases:</p>
+                            <ul className="text-xs text-muted-foreground space-y-1">
+                              {specialty.examples.map((example, idx) => (
+                                <li key={idx} className="flex items-start gap-2">
+                                  <span className="text-primary">•</span>
+                                  <span>{example}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+                    {selectedSpecialties.includes(specialty.name) && (
                       <CheckCircle2 className="h-5 w-5 text-primary" />
                     )}
                   </div>

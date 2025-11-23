@@ -11,6 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Loader2, Upload, Clock } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import AddressPicker from "@/components/AddressPicker";
+import MultiClinicManager, { Clinic } from "@/components/MultiClinicManager";
 
 const Auth = () => {
   const [mode, setMode] = useState<"choice" | "dentist" | "clinic" | "login">("choice");
@@ -33,6 +34,7 @@ const Auth = () => {
   const [chairCount, setChairCount] = useState("");
   const [address, setAddress] = useState("");
   const [addressData, setAddressData] = useState<any>(null);
+  const [clinics, setClinics] = useState<Clinic[]>([]);
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [loading, setLoading] = useState(false);
   const [verificationPending, setVerificationPending] = useState(false);
@@ -66,8 +68,20 @@ const Auth = () => {
       return;
     }
 
-    if (!addressData || !addressData.street) {
-      toast({ title: "Error", description: "Please select your address on the map.", variant: "destructive" });
+    if (clinics.length === 0) {
+      toast({ title: "Error", description: "Please add at least one clinic.", variant: "destructive" });
+      return;
+    }
+
+    const hasIncompleteClinic = clinics.some(c => !c.name || !c.address);
+    if (hasIncompleteClinic) {
+      toast({ title: "Error", description: "Please complete all clinic details.", variant: "destructive" });
+      return;
+    }
+
+    const hasDefault = clinics.some(c => c.isDefault);
+    if (!hasDefault) {
+      toast({ title: "Error", description: "Please set one clinic as default.", variant: "destructive" });
       return;
     }
     
@@ -87,16 +101,17 @@ const Auth = () => {
       });
       if (error) throw error;
       if (data.user) {
+        const defaultClinic = clinics.find(c => c.isDefault);
         await supabase.from("profiles").insert({ 
           id: data.user.id, 
           email, 
           full_name: fullName, 
-          clinic_name: clinicName, 
+          clinic_name: defaultClinic?.name || clinicName, 
           phone, 
           specialty: specialty.join(", "), 
           preferred_materials: materials, 
           license_url: licenseNumber, 
-          country 
+          country: defaultClinic?.country || country
         });
       }
       setVerificationPending(true);
@@ -252,15 +267,12 @@ const Auth = () => {
                 </div>
               </div>
               <div><Label>Birth Date *</Label><Input type="date" value={birthDate} onChange={(e) => setBirthDate(e.target.value)} required /></div>
-              <div><Label>Clinic Name</Label><Input value={clinicName} onChange={(e) => setClinicName(e.target.value)} /></div>
-              <AddressPicker 
-                onAddressSelect={(addr) => {
-                  setAddressData(addr);
-                  setCity(addr.city);
-                  setCountry(addr.country);
-                  setAddress(addr.street);
-                }} 
+              
+              <MultiClinicManager 
+                clinics={clinics}
+                onChange={setClinics}
               />
+
               <div><Label>Email *</Label><Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required /></div>
               <div><Label>Phone</Label><Input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} /></div>
               <div><Label>Password *</Label><Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required /></div>
@@ -294,7 +306,7 @@ const Auth = () => {
                 <Input type="file" accept="image/*,.pdf" onChange={(e) => setClinicLicensePhoto(e.target.files?.[0] || null)} required className="cursor-pointer mt-2" />
                 {clinicLicensePhoto && <p className="text-xs text-secondary mt-1">✓ {clinicLicensePhoto.name}</p>}
               </div>
-              <div><Label>Responsible Dentist Name *</Label><Input value={fullName} onChange={(e) => setFullName(e.target.value)} required /></div>
+              <div><Label>Owner Dentist Name *</Label><Input value={fullName} onChange={(e) => setFullName(e.target.value)} required /></div>
               <div>
                 <Label>Owner Dentist License Photo *</Label>
                 <Input type="file" accept="image/*,.pdf" onChange={(e) => setOwnerLicensePhoto(e.target.files?.[0] || null)} required className="cursor-pointer mt-2" />

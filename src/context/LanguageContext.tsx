@@ -22,7 +22,11 @@ const translations = {
     activeCases: 'Active Cases',
     draftCases: 'Draft Cases',
     completedCases: 'Completed Cases',
-    // Add more translations as needed
+    // New translations
+    addClinic: 'Add all locations you practice in; set your default pickup/delivery address.',
+    specialtiesHelp: 'Examples help labs understand your typical cases.',
+    shadeHelp: 'Select porcelain shade; add stump shade if needed.',
+    splitPaymentHelp: '30% now, 70% on delivery confirmation.',
   },
   ar: {
     dashboard: 'لوحة التحكم',
@@ -37,7 +41,11 @@ const translations = {
     activeCases: 'الحالات النشطة',
     draftCases: 'المسودات',
     completedCases: 'الحالات المكتملة',
-    // Add more translations as needed
+    // New translations
+    addClinic: 'أضف جميع المواقع التي تمارس فيها؛ حدد عنوان الاستلام / التوصيل الافتراضي.',
+    specialtiesHelp: 'تساعد الأمثلة المختبرات على فهم حالاتك النموذجية.',
+    shadeHelp: 'حدد درجة البورسلين؛ أضف درجة الجذع إذا لزم الأمر.',
+    splitPaymentHelp: '30٪ الآن، 70٪ عند تأكيد التسليم.',
   },
 };
 
