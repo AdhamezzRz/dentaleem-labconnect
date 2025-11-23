@@ -57,7 +57,7 @@ const ShadeSelector = ({ value, onChange, stumpNote = "" }: ShadeSelectorProps) 
 
       <div className="space-y-2">
         <Label>Select Shade *</Label>
-        <Select value={value} onValueChange={handleShadeSelect}>
+        <Select defaultValue={value} onValueChange={handleShadeSelect}>
           <SelectTrigger>
             <SelectValue placeholder="Select a shade" />
           </SelectTrigger>
