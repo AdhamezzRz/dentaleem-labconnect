@@ -16,10 +16,10 @@ import AddCreditCardModal from "@/components/AddCreditCardModal";
 interface Restoration {
   id: string;
   type: string;
-  teeth: string[]; // Now using alphabetical notation (UR1, UL2, etc.)
+  teeth: string[]; // Alphabetical notation (UR1, UL2, etc.)
   material: string;
   shade: string;
-  shadeNote?: string; // For stump shade and characterization
+  shadeNote?: string;
   notes: string;
   hasTryIn: boolean;
   isTryIn?: boolean;
@@ -39,9 +39,10 @@ const CreateCase = () => {
   const [patientName, setPatientName] = useState("");
   const [internalPatientId, setInternalPatientId] = useState("");
   const [patientType, setPatientType] = useState<"adult" | "pediatric">("adult");
-  const [restorations, setRestorations] = useState<Restoration[]>([
-    { id: "1", type: "", teeth: [], material: "", shade: "", notes: "", hasTryIn: false }
-  ]);
+  const [clinic, setClinic] = useState("Main Clinic");
+  const [priority, setPriority] = useState<"standard" | "urgent">("standard");
+  const [caseNotes, setCaseNotes] = useState("");
+  const [restorations, setRestorations] = useState<Restoration[]>([]);
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
   const [selectedLab, setSelectedLab] = useState("");
   const [paymentOption, setPaymentOption] = useState<"full" | "split">("full");
@@ -50,6 +51,7 @@ const CreateCase = () => {
   const [promoCode, setPromoCode] = useState("");
   const [promoApplied, setPromoApplied] = useState(false);
   const [promoDiscount, setPromoDiscount] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Pre-fill lab from marketplace
   useEffect(() => {
@@ -70,7 +72,7 @@ const CreateCase = () => {
   ];
 
   const addRestoration = () => {
-    setRestorations([...restorations, { 
+    const newRestoration: Restoration = { 
       id: Date.now().toString(), 
       type: "", 
       teeth: [], 
@@ -78,7 +80,9 @@ const CreateCase = () => {
       shade: "", 
       notes: "",
       hasTryIn: false
-    }]);
+    };
+    setRestorations([...restorations, newRestoration]);
+    toast.success("Restoration added");
   };
 
   const removeRestoration = (id: string) => {
@@ -165,20 +169,33 @@ const CreateCase = () => {
   const handleNext = () => {
     // Validation for step 1 - Patient Info
     if (currentStep === 1) {
-      if (!patientName) {
-        toast.error("Patient name is required");
+      if (!patientName.trim()) {
+        toast.error("❌ Patient name is required");
         return;
       }
-      if (restorations.some(r => !r.type || r.teeth.length === 0)) {
-        toast.error("Please complete all restoration details");
+      if (restorations.length === 0) {
+        toast.error("❌ Please add at least one restoration");
+        return;
+      }
+      const incompleteRestoration = restorations.find(r => !r.isTryIn && (!r.type || r.teeth.length === 0));
+      if (incompleteRestoration) {
+        toast.error("❌ Please complete all restoration details (type and teeth)");
         return;
       }
     }
 
     // Validation for step 2 - Material
     if (currentStep === 2) {
-      if (restorations.some(r => !r.isTryIn && (!r.material || !r.shade))) {
-        toast.error("Please select material and shade for all restorations");
+      const nonTryInRestorations = restorations.filter(r => !r.isTryIn);
+      const missingMaterial = nonTryInRestorations.find(r => !r.material);
+      const missingShade = nonTryInRestorations.find(r => !r.shade || r.shade.trim() === "");
+      
+      if (missingMaterial) {
+        toast.error("❌ Please select material for all restorations");
+        return;
+      }
+      if (missingShade) {
+        toast.error("❌ Please select shade for all restorations");
         return;
       }
     }
@@ -186,7 +203,7 @@ const CreateCase = () => {
     // Validation for step 3 - Lab Selection
     if (currentStep === 3) {
       if (!selectedLab) {
-        toast.error("Please select a laboratory");
+        toast.error("❌ Please select a laboratory");
         return;
       }
     }
@@ -195,35 +212,42 @@ const CreateCase = () => {
     if (currentStep === 4) {
       const hasIntraoralScan = uploadedFiles.some(f => f.type === "intraoral");
       const hasImage = uploadedFiles.some(f => f.type === "image");
-      if (!hasIntraoralScan || !hasImage) {
-        toast.error("At least one intraoral scan and one image are required");
+      if (!hasIntraoralScan) {
+        toast.error("❌ At least one intraoral scan is required");
+        return;
+      }
+      if (!hasImage) {
+        toast.error("❌ At least one patient image/photo is required");
         return;
       }
     }
 
     if (currentStep < 6) {
       setCurrentStep(currentStep + 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      toast.success(`✓ Step ${currentStep} completed`);
     }
   };
 
   const handleBack = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
   const handleFileUpload = (type: string) => {
     // Mock file upload with internal ID
     const fileName = internalPatientId 
-      ? `${type}_${internalPatientId}_${Date.now()}.stl`
-      : `${type}_${Date.now()}.stl`;
+      ? `${patientName.replace(/\s/g, '_')}_${internalPatientId}_${type}_${Date.now()}.stl`
+      : `${patientName.replace(/\s/g, '_')}_${type}_${Date.now()}.stl`;
     
     setUploadedFiles([...uploadedFiles, { 
       name: fileName, 
       type, 
       patientName 
     }]);
-    toast.success(`${type} file uploaded`);
+    toast.success(`✓ ${type} file uploaded`);
   };
 
   const handlePaymentSelect = (option: "full" | "split") => {
@@ -243,9 +267,11 @@ const CreateCase = () => {
   const handleSubmit = () => {
     // Final validation before submission
     if (paymentOption === "split" && !hasSavedCard) {
-      toast.error("Please add a credit card for split payment");
+      toast.error("❌ Please add a credit card for split payment");
       return;
     }
+
+    setIsSubmitting(true);
 
     // Simulate case creation
     const caseId = `CS${Date.now().toString().slice(-6)}`;
@@ -256,6 +282,9 @@ const CreateCase = () => {
         internalId: internalPatientId,
         type: patientType,
       },
+      clinic,
+      priority,
+      notes: caseNotes,
       restorations: restorations.map(r => ({
         type: r.type,
         teeth: r.teeth,
@@ -279,10 +308,14 @@ const CreateCase = () => {
     };
 
     console.log("Case created:", caseData);
-    toast.success(`Case ${caseId} created successfully! Redirecting...`);
     
     setTimeout(() => {
-      navigate("/dashboard");
+      setIsSubmitting(false);
+      toast.success(`🎉 Case ${caseId} created successfully!`);
+      
+      setTimeout(() => {
+        navigate(`/case/${caseId}`, { state: { caseData } });
+      }, 800);
     }, 1500);
   };
 
@@ -317,7 +350,7 @@ const CreateCase = () => {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-foreground mb-2">Create New Case</h1>
-          <p className="text-muted-foreground">Step 4 of 7 — Case Creation</p>
+          <p className="text-muted-foreground">Step {currentStep} of 6 — Case Creation</p>
           <div className="w-full bg-muted rounded-full h-2 mt-3">
             <div 
               className="bg-gradient-to-r from-primary to-secondary h-2 rounded-full transition-all duration-300"
@@ -429,6 +462,17 @@ const CreateCase = () => {
                 </div>
               </div>
 
+              <div className="space-y-2">
+                <Label htmlFor="caseNotes">Case Notes / Instructions</Label>
+                <Textarea 
+                  id="caseNotes" 
+                  value={caseNotes}
+                  onChange={(e) => setCaseNotes(e.target.value)}
+                  placeholder="Priority instructions, special requests, delivery notes..." 
+                  rows={3}
+                />
+              </div>
+
               {/* Restorations */}
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
@@ -441,118 +485,144 @@ const CreateCase = () => {
                     className="gap-2"
                   >
                     <Plus className="h-4 w-4" />
-                    Add Another Restoration
+                    Add Restoration
                   </Button>
                 </div>
 
-                {restorations.map((restoration, index) => (
-                  <Card 
-                    key={restoration.id} 
-                    className={`p-6 border-2 animate-fade-in ${
-                      restoration.isTryIn ? "ml-8 border-secondary/30 bg-secondary/5" : ""
-                    }`}
-                  >
-                    <div className="flex items-start justify-between mb-4">
+                {restorations.length === 0 ? (
+                  <Card className="p-8 text-center border-2 border-dashed border-border">
+                    <div className="flex flex-col items-center gap-3">
+                      <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center">
+                        <Plus className="h-6 w-6 text-muted-foreground" />
+                      </div>
                       <div>
-                        <h3 className="font-semibold text-foreground">
-                          {restoration.isTryIn ? "Try-In (PMMA)" : `Restoration ${restorations.filter(r => !r.isTryIn).findIndex(r => r.id === restoration.id) + 1}`}
-                        </h3>
-                        {restoration.isTryIn && (
-                          <p className="text-xs text-muted-foreground mt-1">
-                            Temporary PMMA version for fitting verification
-                          </p>
+                        <h3 className="font-medium text-foreground mb-1">No restorations added yet</h3>
+                        <p className="text-sm text-muted-foreground mb-3">
+                          Click "Add Restoration" to begin
+                        </p>
+                        <Button 
+                          type="button" 
+                          variant="default" 
+                          size="sm" 
+                          onClick={addRestoration}
+                          className="gap-2"
+                        >
+                          <Plus className="h-4 w-4" />
+                          Add First Restoration
+                        </Button>
+                      </div>
+                    </div>
+                  </Card>
+                ) : (
+                  restorations.map((restoration) => (
+                    <Card 
+                      key={restoration.id} 
+                      className={`p-6 border-2 animate-fade-in ${
+                        restoration.isTryIn ? "ml-8 border-secondary/30 bg-secondary/5" : ""
+                      }`}
+                    >
+                      <div className="flex items-start justify-between mb-4">
+                        <div>
+                          <h3 className="font-semibold text-foreground">
+                            {restoration.isTryIn ? "Try-In (PMMA)" : `Restoration ${restorations.filter(r => !r.isTryIn).findIndex(r => r.id === restoration.id) + 1}`}
+                          </h3>
+                          {restoration.isTryIn && (
+                            <p className="text-xs text-muted-foreground mt-1">
+                              Temporary PMMA version for fitting verification
+                            </p>
+                          )}
+                        </div>
+                        {restorations.filter(r => !r.isTryIn).length > 1 && !restoration.isTryIn && (
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => removeRestoration(restoration.id)}
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
                         )}
                       </div>
-                      {restorations.filter(r => !r.isTryIn).length > 1 && !restoration.isTryIn && (
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => removeRestoration(restoration.id)}
-                        >
-                          <X className="h-4 w-4" />
-                        </Button>
-                      )}
-                    </div>
 
-                    {!restoration.isTryIn && (
-                      <div className="space-y-4">
-                        <div className="space-y-2">
-                          <Label>Restoration Type *</Label>
-                          <Select 
-                            value={restoration.type}
-                            onValueChange={(value) => updateRestoration(restoration.id, "type", value)}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select type" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="crown">Crown</SelectItem>
-                              <SelectItem value="bridge">Bridge</SelectItem>
-                              <SelectItem value="veneer">Veneer</SelectItem>
-                              <SelectItem value="implant">Implant Crown</SelectItem>
-                              <SelectItem value="ortho">Ortho Appliance</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label>Select Teeth *</Label>
-                          <TeethChartInteractive
-                            selectedTeeth={restoration.teeth}
-                            onTeethChange={(teeth) => updateRestoration(restoration.id, "teeth", teeth)}
-                          />
-                        </div>
-
-                        <div className="flex items-center space-x-2 p-3 bg-muted/30 rounded-lg">
-                          <Checkbox 
-                            id={`tryin-${restoration.id}`}
-                            checked={restoration.hasTryIn}
-                            onCheckedChange={(checked) => updateRestoration(restoration.id, "hasTryIn", checked)}
-                          />
-                          <div className="flex-1">
-                            <Label 
-                              htmlFor={`tryin-${restoration.id}`}
-                              className="cursor-pointer font-medium"
+                      {!restoration.isTryIn && (
+                        <div className="space-y-4">
+                          <div className="space-y-2">
+                            <Label>Restoration Type *</Label>
+                            <Select 
+                              value={restoration.type}
+                              onValueChange={(value) => updateRestoration(restoration.id, "type", value)}
                             >
-                              Include Try-In for this restoration
-                            </Label>
-                            <p className="text-xs text-muted-foreground mt-1">
-                              A temporary PMMA version for fitting before final production
-                            </p>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select type" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="crown">Crown</SelectItem>
+                                <SelectItem value="bridge">Bridge</SelectItem>
+                                <SelectItem value="veneer">Veneer</SelectItem>
+                                <SelectItem value="implant">Implant Crown</SelectItem>
+                                <SelectItem value="ortho">Ortho Appliance</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+
+                          <div className="space-y-2">
+                            <Label>Select Teeth *</Label>
+                            <TeethChartInteractive
+                              selectedTeeth={restoration.teeth}
+                              onTeethChange={(teeth) => updateRestoration(restoration.id, "teeth", teeth)}
+                            />
+                          </div>
+
+                          <div className="flex items-center space-x-2 p-3 bg-muted/30 rounded-lg">
+                            <Checkbox 
+                              id={`tryin-${restoration.id}`}
+                              checked={restoration.hasTryIn}
+                              onCheckedChange={(checked) => updateRestoration(restoration.id, "hasTryIn", checked)}
+                            />
+                            <div className="flex-1">
+                              <Label 
+                                htmlFor={`tryin-${restoration.id}`}
+                                className="cursor-pointer font-medium"
+                              >
+                                Include Try-In for this restoration
+                              </Label>
+                              <p className="text-xs text-muted-foreground mt-1">
+                                A temporary PMMA version for fitting before final production
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="space-y-2">
+                            <Label>Additional Notes</Label>
+                            <Textarea 
+                              value={restoration.notes}
+                              onChange={(e) => updateRestoration(restoration.id, "notes", e.target.value)}
+                              placeholder="Shade details, margin specifications, special requests..." 
+                              rows={3} 
+                            />
                           </div>
                         </div>
+                      )}
 
-                        <div className="space-y-2">
-                          <Label>Additional Notes</Label>
-                          <Textarea 
-                            value={restoration.notes}
-                            onChange={(e) => updateRestoration(restoration.id, "notes", e.target.value)}
-                            placeholder="Shade details, margin specifications, special requests..." 
-                            rows={3} 
-                          />
+                      {restoration.isTryIn && (
+                        <div className="space-y-2 text-sm">
+                          <div className="flex justify-between py-2">
+                            <span className="text-muted-foreground">Type:</span>
+                            <span className="font-medium text-foreground">{restoration.type}</span>
+                          </div>
+                          <div className="flex justify-between py-2">
+                            <span className="text-muted-foreground">Material:</span>
+                            <span className="font-medium text-secondary">PMMA (Temporary)</span>
+                          </div>
+                          <div className="flex justify-between py-2">
+                            <span className="text-muted-foreground">Teeth:</span>
+                            <span className="font-medium text-foreground">{restoration.teeth.join(", ")}</span>
+                          </div>
                         </div>
-                      </div>
-                    )}
-
-                    {restoration.isTryIn && (
-                      <div className="space-y-2 text-sm">
-                        <div className="flex justify-between py-2">
-                          <span className="text-muted-foreground">Type:</span>
-                          <span className="font-medium text-foreground">{restoration.type}</span>
-                        </div>
-                        <div className="flex justify-between py-2">
-                          <span className="text-muted-foreground">Material:</span>
-                          <span className="font-medium text-secondary">PMMA (Temporary)</span>
-                        </div>
-                        <div className="flex justify-between py-2">
-                          <span className="text-muted-foreground">Teeth:</span>
-                          <span className="font-medium text-foreground">{restoration.teeth.join(", ")}</span>
-                        </div>
-                      </div>
-                    )}
-                  </Card>
-                ))}
+                      )}
+                    </Card>
+                  ))
+                )}
               </div>
             </div>
           )}
@@ -673,7 +743,6 @@ const CreateCase = () => {
             </div>
           )}
 
-
           {/* Step 4 - File Uploads */}
           {currentStep === 4 && (
             <div className="space-y-6">
@@ -786,7 +855,7 @@ const CreateCase = () => {
                   Restorations ({restorations.filter(r => !r.isTryIn).length} items)
                 </h3>
                 <div className="space-y-4">
-                  {restorations.map((restoration, index) => (
+                  {restorations.map((restoration) => (
                     <div 
                       key={restoration.id}
                       className={`p-4 rounded-lg ${
@@ -948,9 +1017,9 @@ const CreateCase = () => {
                 </Label>
                 <div className="flex gap-2">
                   <Input 
-                    placeholder="Enter promo code"
+                    placeholder="Enter promo code (e.g., DENTAL10)"
                     value={promoCode}
-                    onChange={(e) => setPromoCode(e.target.value)}
+                    onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
                     className="flex-1"
                     disabled={promoApplied}
                   />
@@ -959,12 +1028,12 @@ const CreateCase = () => {
                     onClick={handleApplyPromo}
                     disabled={promoApplied || !promoCode}
                   >
-                    {promoApplied ? "Applied" : "Apply"}
+                    {promoApplied ? "Applied ✓" : "Apply"}
                   </Button>
                 </div>
                 {promoApplied && (
                   <p className="text-sm text-secondary font-medium mt-2">
-                    ✅ Promo applied! Discount -10%
+                    ✅ Promo code applied! You saved ${(totalPrice * promoDiscount).toFixed(2)}
                   </p>
                 )}
               </Card>
@@ -974,7 +1043,7 @@ const CreateCase = () => {
                 <div className="grid grid-cols-2 gap-4">
                   <Card 
                     className={`p-4 cursor-pointer transition-all ${
-                      paymentOption === "full" ? "border-primary bg-primary/5" : "hover:border-primary/50"
+                      paymentOption === "full" ? "border-primary border-2 bg-primary/5" : "hover:border-primary/50"
                     }`}
                     onClick={() => handlePaymentSelect("full")}
                   >
@@ -988,17 +1057,17 @@ const CreateCase = () => {
                   </Card>
                   <Card 
                     className={`p-4 cursor-pointer transition-all ${
-                      paymentOption === "split" ? "border-primary bg-primary/5" : "hover:border-primary/50"
+                      paymentOption === "split" ? "border-primary border-2 bg-primary/5" : "hover:border-primary/50"
                     }`}
                     onClick={() => handlePaymentSelect("split")}
                   >
                     <p className="font-medium text-foreground">Split Payment</p>
                     <p className="text-sm text-muted-foreground">30% now, 70% on delivery</p>
                     <p className="text-xs text-muted-foreground mt-2">
-                      30% now to start; 70% released on confirmed delivery
+                      30% now to start; 70% auto-captured on confirmed delivery
                     </p>
                     <p className="text-xs text-muted-foreground mt-1">
-                      {hasSavedCard ? "✓ Card saved" : "Requires saved credit card"}
+                      {hasSavedCard ? "✓ Card saved" : "⚠ Requires saved credit card"}
                     </p>
                   </Card>
                 </div>
@@ -1009,7 +1078,9 @@ const CreateCase = () => {
                   <AlertCircle className="h-5 w-5 text-secondary flex-shrink-0 mt-0.5" />
                   <div className="text-sm">
                     <p className="font-medium text-foreground">Credit card required</p>
-                    <p className="text-muted-foreground">A saved credit card is required for split payments (30% now, 70% auto-capture on delivery confirmation).</p>
+                    <p className="text-muted-foreground">
+                      A saved credit card is required for split payments. We'll charge 30% now and automatically capture the remaining 70% when delivery is confirmed.
+                    </p>
                   </div>
                 </div>
               )}
@@ -1023,7 +1094,7 @@ const CreateCase = () => {
                       <span className="font-medium text-foreground">${(discountedPrice * 0.3).toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Balance (70% on delivery)</span>
+                      <span className="text-muted-foreground">Balance (70% on delivery confirmation)</span>
                       <span className="font-medium text-foreground">${(discountedPrice * 0.7).toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between pt-2 border-t border-border">
@@ -1042,7 +1113,7 @@ const CreateCase = () => {
               <Button 
                 variant="outline" 
                 onClick={handleBack}
-                disabled={currentStep === 1}
+                disabled={currentStep === 1 || isSubmitting}
               >
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back
@@ -1051,13 +1122,18 @@ const CreateCase = () => {
                 variant="outline"
                 onClick={handleSaveDraft}
                 className="gap-2 text-muted-foreground hover:text-foreground"
+                disabled={isSubmitting}
               >
                 <Save className="h-4 w-4" />
                 Save as Draft
               </Button>
             </div>
             {currentStep < 6 ? (
-              <Button onClick={handleNext} className="bg-primary hover:bg-primary/90">
+              <Button 
+                onClick={handleNext} 
+                className="bg-primary hover:bg-primary/90"
+                disabled={isSubmitting}
+              >
                 Next
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
@@ -1065,10 +1141,19 @@ const CreateCase = () => {
               <Button 
                 onClick={handleSubmit} 
                 className="bg-primary hover:bg-primary/90"
-                disabled={paymentOption === "split" && !hasSavedCard}
+                disabled={(paymentOption === "split" && !hasSavedCard) || isSubmitting}
               >
-                <CheckCircle2 className="mr-2 h-4 w-4" />
-                Create Case & Pay
+                {isSubmitting ? (
+                  <>
+                    <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-background border-t-transparent" />
+                    Creating Case...
+                  </>
+                ) : (
+                  <>
+                    <CheckCircle2 className="mr-2 h-4 w-4" />
+                    Create Case & Pay
+                  </>
+                )}
               </Button>
             )}
           </div>

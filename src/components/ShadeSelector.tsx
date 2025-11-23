@@ -27,12 +27,13 @@ const vita3DMaster = [
 ];
 
 const ShadeSelector = ({ value, onChange, stumpNote = "" }: ShadeSelectorProps) => {
-  const [selectedShade, setSelectedShade] = useState(value);
+  // Use undefined for empty values to ensure Select placeholder works
+  const [selectedShade, setSelectedShade] = useState<string | undefined>(value || undefined);
   const [note, setNote] = useState(stumpNote);
 
   // Keep internal state in sync with parent
   useEffect(() => {
-    setSelectedShade(value);
+    setSelectedShade(value || undefined);
   }, [value]);
 
   useEffect(() => {
@@ -49,7 +50,7 @@ const ShadeSelector = ({ value, onChange, stumpNote = "" }: ShadeSelectorProps) 
 
   const handleNoteChange = (newNote: string) => {
     setNote(newNote);
-    onChange(selectedShade, newNote);
+    onChange(selectedShade || "", newNote);
   };
 
   return (
