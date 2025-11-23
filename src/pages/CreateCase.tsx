@@ -32,6 +32,16 @@ interface UploadedFile {
   patientName: string;
 }
 
+const MATERIALS_REQUIRING_SHADE = ["Zirconia", "E-max", "Metal Ceramic"];
+
+const materialRequiresShade = (material: string) => {
+  if (!material) return false;
+  const normalized = material.toLowerCase();
+  return MATERIALS_REQUIRING_SHADE.some(mat =>
+    normalized.includes(mat.toLowerCase())
+  );
+};
+
 const CreateCase = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -93,58 +103,64 @@ const CreateCase = () => {
   };
 
   const updateRestoration = (id: string, field: keyof Restoration, value: any) => {
-    setRestorations(restorations.map(r => {
-      if (r.id === id) {
-        const updated = { ...r, [field]: value };
-        
-        // If toggling try-in
-        if (field === "hasTryIn") {
-          if (value === true) {
-            // Add try-in restoration
-            const tryInId = `${id}-tryin`;
-            const tryIn: Restoration = {
-              id: tryInId,
-              type: r.type,
-              teeth: r.teeth,
-              material: "PMMA",
-              shade: r.shade,
-              notes: "Try-In (PMMA)",
-              hasTryIn: false,
-              isTryIn: true,
-              linkedToId: id
-            };
+    setRestorations(prevRestorations =>
+      prevRestorations.map(r => {
+        if (r.id === id) {
+          const updated = { ...r, [field]: value };
+
+          // If toggling try-in
+          if (field === "hasTryIn") {
+            if (value === true) {
+              // Add try-in restoration
+              const tryInId = `${id}-tryin`;
+              const tryIn: Restoration = {
+                id: tryInId,
+                type: r.type,
+                teeth: r.teeth,
+                material: "PMMA",
+                shade: r.shade,
+                notes: "Try-In (PMMA)",
+                hasTryIn: false,
+                isTryIn: true,
+                linkedToId: id,
+              };
+              setTimeout(() => {
+                setRestorations(prev => {
+                  const mainIndex = prev.findIndex(res => res.id === id);
+                  const newRestorations = [...prev];
+                  newRestorations.splice(mainIndex + 1, 0, tryIn);
+                  return newRestorations;
+                });
+              }, 0);
+            } else {
+              // Remove try-in restoration
+              setTimeout(() => {
+                setRestorations(prev =>
+                  prev.filter(res => res.linkedToId !== id)
+                );
+              }, 0);
+            }
+          }
+
+          // Update linked try-in if main restoration changes
+          if (!r.isTryIn && r.hasTryIn && (field === "type" || field === "teeth" || field === "shade")) {
             setTimeout(() => {
-              setRestorations(prev => {
-                const mainIndex = prev.findIndex(res => res.id === id);
-                const newRestorations = [...prev];
-                newRestorations.splice(mainIndex + 1, 0, tryIn);
-                return newRestorations;
-              });
-            }, 0);
-          } else {
-            // Remove try-in restoration
-            setTimeout(() => {
-              setRestorations(prev => prev.filter(res => res.linkedToId !== id));
+              setRestorations(prev =>
+                prev.map(res => {
+                  if (res.linkedToId === id) {
+                    return { ...res, [field]: value };
+                  }
+                  return res;
+                })
+              );
             }, 0);
           }
+
+          return updated;
         }
-        
-        // Update linked try-in if main restoration changes
-        if (!r.isTryIn && r.hasTryIn && (field === "type" || field === "teeth" || field === "shade")) {
-          setTimeout(() => {
-            setRestorations(prev => prev.map(res => {
-              if (res.linkedToId === id) {
-                return { ...res, [field]: value };
-              }
-              return res;
-            }));
-          }, 0);
-        }
-        
-        return updated;
-      }
-      return r;
-    }));
+        return r;
+      })
+    );
   };
 
   const handleApplyPromo = () => {
@@ -188,7 +204,11 @@ const CreateCase = () => {
     if (currentStep === 2) {
       const nonTryInRestorations = restorations.filter(r => !r.isTryIn);
       const missingMaterial = nonTryInRestorations.find(r => !r.material);
-      const missingShade = nonTryInRestorations.find(r => !r.shade || r.shade.trim() === "");
+
+      const restorationsRequiringShade = restorations.filter(r => materialRequiresShade(r.material));
+      const missingShade = restorationsRequiringShade.find(
+        r => !r.shade || r.shade.trim() === ""
+      );
       
       if (missingMaterial) {
         toast.error("❌ Please select material for all restorations");
