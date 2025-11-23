@@ -61,27 +61,20 @@ const ShadeSelector = ({ value, onChange, stumpNote = "" }: ShadeSelectorProps) 
         </p>
       </div>
 
-      <div>
-        <Label className="mb-3 block">Select Shade *</Label>
-        <Card className="p-4 bg-muted/20">
-          <div className="grid grid-cols-5 gap-2">
+      <div className="space-y-2">
+        <Label>Select Shade *</Label>
+        <Select value={selectedShade} onValueChange={handleShadeSelect}>
+          <SelectTrigger>
+            <SelectValue placeholder="Select a shade" />
+          </SelectTrigger>
+          <SelectContent className="max-h-[300px]">
             {shadeList.map((shade) => (
-              <button
-                key={shade}
-                type="button"
-                onClick={() => handleShadeSelect(shade)}
-                className={`p-3 rounded-lg border-2 text-xs font-medium transition-all ${
-                  selectedShade === shade
-                    ? "bg-primary text-primary-foreground border-primary shadow-lg scale-105"
-                    : "bg-card border-border text-foreground hover:border-primary/50 hover:bg-primary/5"
-                }`}
-                title={shade}
-              >
+              <SelectItem key={shade} value={shade}>
                 {shade}
-              </button>
+              </SelectItem>
             ))}
-          </div>
-        </Card>
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="space-y-2">
