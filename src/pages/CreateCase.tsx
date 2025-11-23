@@ -241,8 +241,49 @@ const CreateCase = () => {
   };
 
   const handleSubmit = () => {
-    toast.success("Case created successfully!");
-    navigate("/dashboard");
+    // Final validation before submission
+    if (paymentOption === "split" && !hasSavedCard) {
+      toast.error("Please add a credit card for split payment");
+      return;
+    }
+
+    // Simulate case creation
+    const caseId = `CS${Date.now().toString().slice(-6)}`;
+    const caseData = {
+      caseId,
+      patient: {
+        name: patientName,
+        internalId: internalPatientId,
+        type: patientType,
+      },
+      restorations: restorations.map(r => ({
+        type: r.type,
+        teeth: r.teeth,
+        material: r.material,
+        shade: r.shade,
+        shadeNote: r.shadeNote,
+        notes: r.notes,
+        isTryIn: r.isTryIn,
+      })),
+      lab: selectedLab,
+      files: uploadedFiles,
+      payment: {
+        option: paymentOption,
+        total: discountedPrice,
+        deposit: paymentOption === "split" ? discountedPrice * 0.3 : discountedPrice,
+        balance: paymentOption === "split" ? discountedPrice * 0.7 : 0,
+        promoApplied,
+        promoDiscount,
+      },
+      createdAt: new Date().toISOString(),
+    };
+
+    console.log("Case created:", caseData);
+    toast.success(`Case ${caseId} created successfully! Redirecting...`);
+    
+    setTimeout(() => {
+      navigate("/dashboard");
+    }, 1500);
   };
 
   const basePrice = 350;
