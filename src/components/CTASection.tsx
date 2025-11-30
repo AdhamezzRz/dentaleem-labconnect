@@ -1,10 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles, Zap } from "lucide-react";
 import { Link } from "react-router-dom";
-
 const CTASection = () => {
-  return (
-    <section id="cta" className="py-24 px-6 bg-background">
+  return <section id="cta" className="py-24 px-6 bg-background">
       <div className="container mx-auto max-w-6xl">
         <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary via-secondary to-primary/90 p-12 md:p-20 shadow-2xl">
           {/* Animated background elements */}
@@ -15,14 +13,10 @@ const CTASection = () => {
 
           {/* Decorative dots */}
           <div className="absolute top-8 right-8 grid grid-cols-3 gap-2 opacity-20">
-            {[...Array(9)].map((_, i) => (
-              <div key={i} className="w-2 h-2 rounded-full bg-white"></div>
-            ))}
+            {[...Array(9)].map((_, i) => <div key={i} className="w-2 h-2 rounded-full bg-white"></div>)}
           </div>
           <div className="absolute bottom-8 left-8 grid grid-cols-3 gap-2 opacity-20">
-            {[...Array(9)].map((_, i) => (
-              <div key={i} className="w-2 h-2 rounded-full bg-white"></div>
-            ))}
+            {[...Array(9)].map((_, i) => <div key={i} className="w-2 h-2 rounded-full bg-white"></div>)}
           </div>
 
           <div className="relative z-10 max-w-4xl mx-auto text-center space-y-8">
@@ -47,7 +41,7 @@ const CTASection = () => {
                 </Button>
               </Link>
               <Link to="/lab/registration">
-                <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white/10 backdrop-blur-sm px-10 h-14">
+                <Button size="lg" variant="outline" className="border-2 border-white text-white backdrop-blur-sm px-10 h-14 bg-secondary-foreground">
                   Join as a Lab
                 </Button>
               </Link>
@@ -72,8 +66,6 @@ const CTASection = () => {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default CTASection;
