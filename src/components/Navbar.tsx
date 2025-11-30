@@ -85,7 +85,7 @@ const Navbar = () => {
             <Globe className="h-4 w-4 text-primary" />
             <span className="text-sm font-medium text-foreground">{language}</span>
           </button>
-          <Link to="/lab/landing">
+          <Link to="/lab/benefits">
             <Button variant="outline" size="sm" className="border-primary text-primary hover:bg-primary/5">
               Join as Lab
             </Button>
@@ -170,7 +170,7 @@ const Navbar = () => {
                 <Globe className="h-4 w-4 text-primary" />
                 <span className="text-sm font-medium">{language}</span>
               </button>
-              <Link to="/lab/landing">
+              <Link to="/lab/benefits">
                 <Button variant="ghost" size="sm" className="w-full">
                   Join as Lab
                 </Button>
