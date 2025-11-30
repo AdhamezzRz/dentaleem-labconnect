@@ -77,12 +77,24 @@ const LabCaseDetail = () => {
       </div>
 
       {/* Content */}
-      <div className="container mx-auto px-6 py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="container mx-auto px-3 sm:px-6 py-4 sm:py-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
           {/* Main Content */}
           <div className="lg:col-span-2">
             <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="grid grid-cols-5 w-full">
+              {/* Mobile: Horizontal Scrolling Tabs */}
+              <div className="overflow-x-auto -mx-3 px-3 mb-4 md:hidden">
+                <TabsList className="inline-flex w-auto min-w-max">
+                  <TabsTrigger value="overview" className="text-xs px-3">Overview</TabsTrigger>
+                  <TabsTrigger value="design" className="text-xs px-3">Design</TabsTrigger>
+                  <TabsTrigger value="production" className="text-xs px-3">Production</TabsTrigger>
+                  <TabsTrigger value="qc" className="text-xs px-3">QC</TabsTrigger>
+                  <TabsTrigger value="delivery" className="text-xs px-3">Delivery</TabsTrigger>
+                </TabsList>
+              </div>
+              
+              {/* Desktop: Full Width Tabs */}
+              <TabsList className="hidden md:grid grid-cols-5 w-full">
                 <TabsTrigger value="overview">Overview</TabsTrigger>
                 <TabsTrigger value="design">Design</TabsTrigger>
                 <TabsTrigger value="production">Production</TabsTrigger>

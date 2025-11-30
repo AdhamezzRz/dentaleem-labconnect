@@ -104,15 +104,15 @@ const Dashboard = () => {
 
         <main className="flex-1 flex flex-col">
           {/* Enhanced Header Bar */}
-          <div className="sticky top-0 z-10 h-16 border-b border-border bg-card/95 backdrop-blur-sm flex items-center justify-between px-6">
-            <div className="flex items-center gap-4">
+          <div className="sticky top-0 z-10 h-14 sm:h-16 border-b border-border bg-card/95 backdrop-blur-sm flex items-center justify-between px-3 sm:px-6">
+            <div className="flex items-center gap-2 sm:gap-4">
               <SidebarTrigger />
-              <h1 className="text-xl font-bold text-foreground">Dashboard</h1>
+              <h1 className="text-lg sm:text-xl font-bold text-foreground">Dashboard</h1>
             </div>
 
-            <div className="flex items-center gap-4">
-              {/* Global Search */}
-              <div className="relative hidden md:block">
+            <div className="flex items-center gap-2 sm:gap-4">
+              {/* Global Search - Hidden on mobile */}
+              <div className="relative hidden lg:block">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input 
                   placeholder="Search patients, cases, labs..." 
@@ -121,24 +121,29 @@ const Dashboard = () => {
               </div>
 
               {/* Notifications */}
-              <Button variant="ghost" size="icon" className="relative">
-                <Bell className="h-5 w-5" />
+              <Button variant="ghost" size="icon" className="relative h-9 w-9 sm:h-10 sm:w-10">
+                <Bell className="h-4 w-4 sm:h-5 sm:w-5" />
                 <span className="absolute top-1 right-1 w-2 h-2 bg-destructive rounded-full" />
               </Button>
 
               {/* Messages */}
-              <Button variant="ghost" size="icon" className="relative">
-                <MessageCircle className="h-5 w-5" />
+              <Button variant="ghost" size="icon" className="relative h-9 w-9 sm:h-10 sm:w-10">
+                <MessageCircle className="h-4 w-4 sm:h-5 sm:w-5" />
                 <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs">
                   3
                 </Badge>
               </Button>
 
-              {/* Create Case Button */}
-              <Link to="/create-case">
+              {/* Create Case Button - Compact on mobile */}
+              <Link to="/create-case" className="hidden sm:block">
                 <Button className="bg-secondary hover:bg-secondary/90">
                   <Plus className="mr-2 h-4 w-4" />
                   Create New Case
+                </Button>
+              </Link>
+              <Link to="/create-case" className="sm:hidden">
+                <Button size="icon" className="bg-secondary hover:bg-secondary/90 h-9 w-9">
+                  <Plus className="h-5 w-5" />
                 </Button>
               </Link>
 
@@ -179,22 +184,22 @@ const Dashboard = () => {
 
           {/* Main Content */}
           <div className="flex-1 overflow-auto">
-            <div className="container mx-auto px-6 py-8">
+            <div className="container mx-auto px-3 sm:px-6 py-4 sm:py-8">
               {/* Stats Grid - Glass Effect Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-6 sm:mb-8">
                 {stats.map((stat, index) => {
                   const Icon = stat.icon;
                   return (
                     <Link key={index} to={stat.link}>
-                      <Card className="p-6 hover:shadow-xl transition-all duration-300 cursor-pointer group backdrop-blur-sm bg-card/50 border-2 hover:border-primary/30">
-                        <div className="flex items-start justify-between mb-4">
-                          <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform">
-                            <Icon className="h-6 w-6 text-primary" />
+                      <Card className="p-4 sm:p-6 hover:shadow-xl transition-all duration-300 cursor-pointer group backdrop-blur-sm bg-card/50 border-2 hover:border-primary/30">
+                        <div className="flex items-start justify-between mb-3 sm:mb-4">
+                          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <Icon className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
                           </div>
                         </div>
                         <div className="space-y-1">
-                          <p className="text-3xl font-bold text-foreground">{stat.value}</p>
-                          <p className="text-sm text-muted-foreground">{stat.label}</p>
+                          <p className="text-2xl sm:text-3xl font-bold text-foreground">{stat.value}</p>
+                          <p className="text-xs sm:text-sm text-muted-foreground">{stat.label}</p>
                           <p className="text-xs text-secondary font-medium">{stat.change}</p>
                         </div>
                       </Card>
@@ -204,9 +209,9 @@ const Dashboard = () => {
               </div>
 
               {/* Two Column Layout */}
-              <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-6">
-                {/* Left Column - 70% */}
-                <div className="space-y-6">
+              <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-4 sm:gap-6">
+                {/* Left Column - Main Content */}
+                <div className="space-y-4 sm:space-y-6">
                   {/* Draft Cases */}
                   {draftCases.length > 0 && (
                     <Card className="p-6 bg-amber-500/5 border-amber-500/20">

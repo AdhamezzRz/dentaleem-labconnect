@@ -366,11 +366,11 @@ const CreateCase = () => {
         </div>
       </nav>
 
-      <div className="container mx-auto px-6 py-8 max-w-5xl">
+      <div className="container mx-auto px-3 sm:px-6 py-4 sm:py-8 max-w-5xl">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">Create New Case</h1>
-          <p className="text-muted-foreground">Step {currentStep} of 6 — Case Creation</p>
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">Create New Case</h1>
+          <p className="text-sm sm:text-base text-muted-foreground">Step {currentStep} of 6 — Case Creation</p>
           <div className="w-full bg-muted rounded-full h-2 mt-3">
             <div 
               className="bg-gradient-to-r from-primary to-secondary h-2 rounded-full transition-all duration-300"
@@ -380,8 +380,25 @@ const CreateCase = () => {
         </div>
 
         {/* Enhanced Progress Steps */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
+        <div className="mb-6 sm:mb-8">
+          {/* Mobile: Horizontal Pill Indicators */}
+          <div className="flex items-center justify-center gap-2 mb-4 md:hidden">
+            {steps.map((step) => (
+              <div
+                key={step.number}
+                className={`h-2 rounded-full transition-all ${
+                  currentStep === step.number
+                    ? "w-8 bg-primary"
+                    : currentStep > step.number
+                    ? "w-2 bg-primary/50"
+                    : "w-2 bg-muted"
+                }`}
+              />
+            ))}
+          </div>
+          
+          {/* Desktop: Full Step Display */}
+          <div className="hidden md:flex items-center justify-between mb-4">
             {steps.map((step, index) => (
               <div key={step.number} className="flex items-center flex-1">
                 <div className="flex flex-col items-center flex-1">
@@ -400,7 +417,7 @@ const CreateCase = () => {
                       step.number
                     )}
                   </div>
-                  <div className="text-center mt-2 hidden md:block">
+                  <div className="text-center mt-2">
                     <p className={`text-xs font-medium transition-colors ${
                       currentStep === step.number ? "text-primary" : "text-foreground"
                     }`}>
@@ -424,7 +441,7 @@ const CreateCase = () => {
         </div>
 
         {/* Form Content */}
-        <Card className="p-8">
+        <Card className="p-4 sm:p-6 md:p-8">
           {/* Step 1 - Patient Information */}
           {currentStep === 1 && (
             <div className="space-y-6">
@@ -1127,13 +1144,14 @@ const CreateCase = () => {
             </div>
           )}
 
-          {/* Navigation Buttons */}
-          <div className="flex justify-between mt-8 pt-6 border-t border-border">
-            <div className="flex gap-2">
+          {/* Navigation Buttons - Sticky on mobile */}
+          <div className="flex flex-col sm:flex-row justify-between gap-3 sm:gap-0 mt-8 pt-6 border-t border-border sticky sm:static bottom-0 left-0 right-0 bg-card sm:bg-transparent p-4 sm:p-0 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] sm:shadow-none z-20">
+            <div className="flex gap-2 order-2 sm:order-1">
               <Button 
                 variant="outline" 
                 onClick={handleBack}
                 disabled={currentStep === 1 || isSubmitting}
+                className="flex-1 sm:flex-none h-12 sm:h-10"
               >
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back
@@ -1141,17 +1159,18 @@ const CreateCase = () => {
               <Button 
                 variant="outline"
                 onClick={handleSaveDraft}
-                className="gap-2 text-muted-foreground hover:text-foreground"
+                className="flex-1 sm:flex-none gap-2 text-muted-foreground hover:text-foreground h-12 sm:h-10"
                 disabled={isSubmitting}
               >
                 <Save className="h-4 w-4" />
-                Save as Draft
+                <span className="hidden sm:inline">Save as Draft</span>
+                <span className="sm:hidden">Save</span>
               </Button>
             </div>
             {currentStep < 6 ? (
               <Button 
                 onClick={handleNext} 
-                className="bg-primary hover:bg-primary/90"
+                className="order-1 sm:order-2 bg-primary hover:bg-primary/90 h-12 sm:h-10"
                 disabled={isSubmitting}
               >
                 Next
@@ -1160,18 +1179,20 @@ const CreateCase = () => {
             ) : (
               <Button 
                 onClick={handleSubmit} 
-                className="bg-primary hover:bg-primary/90"
+                className="order-1 sm:order-2 bg-primary hover:bg-primary/90 h-12 sm:h-10"
                 disabled={(paymentOption === "split" && !hasSavedCard) || isSubmitting}
               >
                 {isSubmitting ? (
                   <>
                     <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-background border-t-transparent" />
-                    Creating Case...
+                    <span className="hidden sm:inline">Creating Case...</span>
+                    <span className="sm:hidden">Creating...</span>
                   </>
                 ) : (
                   <>
                     <CheckCircle2 className="mr-2 h-4 w-4" />
-                    Create Case & Pay
+                    <span className="hidden sm:inline">Create Case & Pay</span>
+                    <span className="sm:hidden">Create & Pay</span>
                   </>
                 )}
               </Button>

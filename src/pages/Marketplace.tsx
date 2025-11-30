@@ -252,9 +252,9 @@ const Marketplace = () => {
         </Breadcrumb>
 
         {/* Header with Gradient */}
-        <div className="mb-8 bg-gradient-to-br from-card to-primary/5 p-6 rounded-xl border border-border/50 sticky top-16 z-10 backdrop-blur-md shadow-sm">
-          <h1 className="text-3xl font-bold text-foreground mb-2">Discover Dental Labs</h1>
-          <p className="text-muted-foreground">
+        <div className="mb-6 sm:mb-8 bg-gradient-to-br from-card to-primary/5 p-4 sm:p-6 rounded-xl border border-border/50 sticky top-16 z-10 backdrop-blur-md shadow-sm">
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">Discover Dental Labs</h1>
+          <p className="text-sm sm:text-base text-muted-foreground">
             Find the perfect lab for your restorations — verified, rated, and ready to deliver.
           </p>
         </div>
@@ -330,7 +330,7 @@ const Marketplace = () => {
             </div>
 
             {/* Enhanced Labs Grid with Animations */}
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
               {filteredLabs.map((lab, index) => (
                 <div 
                   key={lab.id}

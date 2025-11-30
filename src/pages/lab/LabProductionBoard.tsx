@@ -63,8 +63,63 @@ const LabProductionBoard = () => {
       </div>
 
       {/* Kanban Board */}
-      <div className="container mx-auto px-6 py-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+      <div className="container mx-auto px-3 sm:px-6 py-4 sm:py-6">
+        {/* Mobile: Horizontal Swipe Lanes */}
+        <div className="md:hidden overflow-x-auto -mx-3 px-3 pb-4">
+          <div className="flex gap-4 min-w-max">
+            {stages.map((stage) => (
+              <div key={stage.id} className="flex flex-col w-[280px] flex-shrink-0">
+                <div className={`p-3 rounded-t-lg border-b-2 ${stage.color}`}>
+                  <h3 className="font-semibold text-foreground text-sm">{stage.title}</h3>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {cases[stage.id as keyof typeof cases]?.length || 0} cases
+                  </p>
+                </div>
+                <div className="space-y-3 p-3 bg-muted/30 rounded-b-lg h-[500px] overflow-y-auto">
+                  {cases[stage.id as keyof typeof cases]?.map((case_) => (
+                    <Card
+                      key={case_.id}
+                      className="cursor-pointer hover:shadow-lg transition-all duration-200 bg-card"
+                    >
+                      <CardContent className="p-3 space-y-2">
+                        <div className="flex items-start justify-between">
+                          <div>
+                            <p className="font-semibold text-xs text-foreground">{case_.id}</p>
+                            <p className="text-xs text-muted-foreground truncate">{case_.dentist}</p>
+                          </div>
+                          {case_.priority === "Urgent" && (
+                            <Badge variant="destructive" className="text-xs h-5">Urgent</Badge>
+                          )}
+                        </div>
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-2 text-xs">
+                            <User className="h-3 w-3 text-muted-foreground flex-shrink-0" />
+                            <span className="text-muted-foreground truncate">Patient: {case_.patient}</span>
+                          </div>
+                          <p className="text-xs text-muted-foreground">
+                            {case_.count}× {case_.material}
+                          </p>
+                        </div>
+                        <div className="flex items-center justify-between pt-2 border-t">
+                          <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                            <Clock className="h-3 w-3" />
+                            <span>Due in {case_.due}</span>
+                          </div>
+                          <Button variant="ghost" size="sm" className="h-7 text-xs px-2" asChild>
+                            <Link to={`/lab/cases/${case_.id}`}>View</Link>
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        
+        {/* Desktop: Grid Kanban */}
+        <div className="hidden md:grid grid-cols-3 lg:grid-cols-5 gap-4">
           {stages.map((stage) => (
             <div key={stage.id} className="flex flex-col">
               <div className={`p-3 rounded-t-lg border-b-2 ${stage.color}`}>

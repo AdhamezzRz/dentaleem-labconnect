@@ -211,9 +211,9 @@ const CaseDetail = () => {
         </div>
       </nav>
 
-      <div className="container mx-auto px-6 py-8">
-        <div className="flex gap-6">
-          {/* Side Navigation */}
+      <div className="container mx-auto px-3 sm:px-6 py-4 sm:py-8">
+        <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">
+          {/* Side Navigation - Desktop Only */}
           <div className="hidden lg:block w-64 flex-shrink-0">
             <Card className="p-4 sticky top-24">
               <h3 className="text-sm font-semibold text-muted-foreground mb-3">
@@ -240,9 +240,32 @@ const CaseDetail = () => {
               </nav>
             </Card>
           </div>
+          
+          {/* Mobile: Horizontal Scrolling Tabs */}
+          <div className="lg:hidden overflow-x-auto -mx-3 px-3 pb-2">
+            <div className="flex gap-2 min-w-max">
+              {sideNavItems.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => scrollToSection(item.id)}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
+                      activeSection === item.id
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-muted text-foreground"
+                    }`}
+                  >
+                    <Icon className="h-4 w-4" />
+                    {item.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
 
           {/* Main Content */}
-          <div className="flex-1 space-y-6">
+          <div className="flex-1 space-y-4 sm:space-y-6">
             {/* Header */}
             <CaseHeader
               caseId={id || ""}

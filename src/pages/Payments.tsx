@@ -92,20 +92,18 @@ const Payments = () => {
         </div>
       </nav>
 
-      <div className="container mx-auto px-6 py-8">
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-foreground mb-2">
-              Payments & Invoices
-            </h1>
-            <p className="text-muted-foreground">
-              Track all your payments and download invoices
-            </p>
-          </div>
+      <div className="container mx-auto px-3 sm:px-6 py-4 sm:py-8">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">
+            Payments & Invoices
+          </h1>
+          <p className="text-sm sm:text-base text-muted-foreground">
+            Track all your payments and download invoices
+          </p>
         </div>
 
         {/* Summary Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
           <Card className="p-6">
             <div className="flex items-start justify-between">
               <div>

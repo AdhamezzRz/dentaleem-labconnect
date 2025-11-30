@@ -14,7 +14,7 @@ const Hero = () => {
   }, []);
 
   return (
-    <section id="home" className="relative pt-40 pb-32 px-6 overflow-hidden bg-gradient-to-b from-background via-accent/10 to-background">
+    <section id="home" className="relative pt-24 sm:pt-32 pb-16 sm:pb-24 px-4 sm:px-6 overflow-hidden bg-gradient-to-b from-background via-accent/10 to-background">
       {/* Subtle background elements */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-32 left-20 w-96 h-96 bg-primary rounded-full blur-3xl"></div>
@@ -26,29 +26,29 @@ const Hero = () => {
       <div className="absolute bottom-20 left-10 w-24 h-24 border-2 border-primary/20 rounded-full"></div>
 
       <div className="container mx-auto relative z-10">
-        <div className="max-w-6xl mx-auto text-center space-y-12">
+        <div className="max-w-6xl mx-auto text-center space-y-8 sm:space-y-12">
           {/* Premium icon badges */}
-          <div className="flex flex-wrap gap-4 justify-center mb-8 animate-fade-in">
-            <div className="flex items-center gap-2.5 px-5 py-3 rounded-full bg-accent/10 border border-accent/30 hover:bg-accent/20 transition-all hover:scale-105 hover:shadow-md">
-              <Shield className="h-5 w-5 text-primary" />
-              <span className="text-sm font-semibold text-foreground">Secure</span>
+          <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-3 sm:gap-4 justify-center mb-6 sm:mb-8 animate-fade-in">
+            <div className="flex items-center gap-2 px-3 sm:px-5 py-2 sm:py-3 rounded-full bg-accent/10 border border-accent/30 hover:bg-accent/20 transition-all hover:scale-105">
+              <Shield className="h-4 w-4 sm:h-5 sm:w-5 text-primary flex-shrink-0" />
+              <span className="text-xs sm:text-sm font-semibold text-foreground">Secure</span>
             </div>
-            <div className="flex items-center gap-2.5 px-5 py-3 rounded-full bg-accent/10 border border-accent/30 hover:bg-accent/20 transition-all hover:scale-105 hover:shadow-md">
-              <CheckCircle2 className="h-5 w-5 text-primary" />
-              <span className="text-sm font-semibold text-foreground">Verified Labs</span>
+            <div className="flex items-center gap-2 px-3 sm:px-5 py-2 sm:py-3 rounded-full bg-accent/10 border border-accent/30 hover:bg-accent/20 transition-all hover:scale-105">
+              <CheckCircle2 className="h-4 w-4 sm:h-5 sm:w-5 text-primary flex-shrink-0" />
+              <span className="text-xs sm:text-sm font-semibold text-foreground">Verified Labs</span>
             </div>
-            <div className="flex items-center gap-2.5 px-5 py-3 rounded-full bg-accent/10 border border-accent/30 hover:bg-accent/20 transition-all hover:scale-105 hover:shadow-md">
-              <Brain className="h-5 w-5 text-primary" />
-              <span className="text-sm font-semibold text-foreground">AI Workflow</span>
+            <div className="flex items-center gap-2 px-3 sm:px-5 py-2 sm:py-3 rounded-full bg-accent/10 border border-accent/30 hover:bg-accent/20 transition-all hover:scale-105">
+              <Brain className="h-4 w-4 sm:h-5 sm:w-5 text-primary flex-shrink-0" />
+              <span className="text-xs sm:text-sm font-semibold text-foreground">AI Workflow</span>
             </div>
-            <div className="flex items-center gap-2.5 px-5 py-3 rounded-full bg-accent/10 border border-accent/30 hover:bg-accent/20 transition-all hover:scale-105 hover:shadow-md">
-              <Lock className="h-5 w-5 text-primary" />
-              <span className="text-sm font-semibold text-foreground">GDPR/HIPAA Ready</span>
+            <div className="flex items-center gap-2 px-3 sm:px-5 py-2 sm:py-3 rounded-full bg-accent/10 border border-accent/30 hover:bg-accent/20 transition-all hover:scale-105">
+              <Lock className="h-4 w-4 sm:h-5 sm:w-5 text-primary flex-shrink-0" />
+              <span className="text-xs sm:text-sm font-semibold text-foreground">GDPR Ready</span>
             </div>
           </div>
 
           {/* Main headline */}
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-primary leading-[1.15] tracking-tight px-4">
+          <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-primary leading-[1.15] tracking-tight px-2 sm:px-4">
             The Future of Dental Lab Workflow Starts Here.
           </h1>
 
@@ -63,26 +63,26 @@ const Hero = () => {
           </div>
 
           {/* Subtitle */}
-          <p className="text-lg md:text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed px-4">
+          <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed px-4">
             Connect dentists and labs with <span className="font-semibold text-foreground">zero miscommunication</span> and <span className="font-semibold text-foreground">complete transparency.</span>
           </p>
 
           {/* CTAs */}
-          <div className="flex flex-col sm:flex-row gap-5 justify-center items-center pt-8">
-            <Link to="/auth">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-5 justify-center items-center pt-6 sm:pt-8 px-4">
+            <Link to="/auth" className="w-full sm:w-auto">
               <Button 
                 size="lg" 
-                className="h-14 px-10 text-base bg-accent text-foreground hover:bg-accent/90 shadow-lg hover:shadow-xl transition-all group"
+                className="w-full sm:w-auto h-12 sm:h-14 px-6 sm:px-10 text-base bg-accent text-foreground hover:bg-accent/90 shadow-lg hover:shadow-xl transition-all group"
               >
                 Get Started (Dentist)
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
-            <Link to="/lab/registration">
+            <Link to="/lab/registration" className="w-full sm:w-auto">
               <Button 
                 size="lg" 
                 variant="outline" 
-                className="h-14 px-10 text-base border-2 border-primary text-primary hover:bg-primary/5 shadow-md hover:shadow-lg transition-all"
+                className="w-full sm:w-auto h-12 sm:h-14 px-6 sm:px-10 text-base border-2 border-primary text-primary hover:bg-primary/5 shadow-md hover:shadow-lg transition-all"
               >
                 Join as a Dental Lab
               </Button>

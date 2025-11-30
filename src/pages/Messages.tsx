@@ -61,10 +61,10 @@ const Messages = () => {
         </div>
       </header>
 
-      <div className="container mx-auto px-6 py-8">
-        <div className="grid lg:grid-cols-3 gap-6 h-[calc(100vh-200px)]">
+      <div className="container mx-auto px-3 sm:px-6 py-4 sm:py-8">
+        <div className="grid lg:grid-cols-3 gap-4 sm:gap-6 h-[calc(100vh-180px)] sm:h-[calc(100vh-200px)]">
           {/* Conversations List */}
-          <Card className="lg:col-span-1 p-4 flex flex-col">
+          <Card className={`lg:col-span-1 p-3 sm:p-4 flex flex-col ${selectedCase ? 'hidden lg:flex' : 'flex'}`}>
             <div className="mb-4">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -122,15 +122,15 @@ const Messages = () => {
           </Card>
 
           {/* Chat Area */}
-          <Card className="lg:col-span-2 flex flex-col">
+          <Card className={`lg:col-span-2 flex flex-col ${selectedCase ? 'flex' : 'hidden lg:flex'}`}>
             {selectedConversation ? (
               <>
                 {/* Chat Header */}
-                <div className="p-4 border-b border-border flex items-center gap-3">
+                <div className="p-3 sm:p-4 border-b border-border flex items-center gap-3">
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="lg:hidden"
+                    className="lg:hidden h-9 w-9"
                     onClick={() => setSelectedCase(null)}
                   >
                     <ArrowLeft className="h-4 w-4" />
