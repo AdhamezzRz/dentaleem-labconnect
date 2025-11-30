@@ -1,7 +1,15 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
-import ProcessFlow from "@/components/ProcessFlow";
-import Features from "@/components/Features";
+import ProblemSection from "@/components/ProblemSection";
+import SolutionSection from "@/components/SolutionSection";
+import HowItWorks from "@/components/HowItWorks";
+import RemakeChart from "@/components/RemakeChart";
+import LabValueSection from "@/components/LabValueSection";
+import MarketplacePreview from "@/components/MarketplacePreview";
+import FeaturesGrid from "@/components/FeaturesGrid";
+import Testimonials from "@/components/Testimonials";
+import PricingTeaser from "@/components/PricingTeaser";
+import FAQ from "@/components/FAQ";
 import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
 
@@ -10,8 +18,16 @@ const Index = () => {
     <div className="min-h-screen">
       <Navbar />
       <Hero />
-      <ProcessFlow />
-      <Features />
+      <ProblemSection />
+      <SolutionSection />
+      <HowItWorks />
+      <RemakeChart />
+      <LabValueSection />
+      <MarketplacePreview />
+      <FeaturesGrid />
+      <Testimonials />
+      <PricingTeaser />
+      <FAQ />
       <CTASection />
       <Footer />
     </div>
