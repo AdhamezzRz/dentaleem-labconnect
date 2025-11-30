@@ -607,6 +607,8 @@ const CreateCase = () => {
                             <TeethChartInteractive
                               selectedTeeth={restoration.teeth}
                               onTeethChange={(teeth) => updateRestoration(restoration.id, "teeth", teeth)}
+                              mode={patientType}
+                              onModeChange={(mode) => setPatientType(mode)}
                             />
                           </div>
 
