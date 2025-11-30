@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 
 const CTASection = () => {
   return (
-    <section className="py-20 px-6 bg-background">
-      <div className="container mx-auto">
+    <section id="cta" className="py-24 px-6 bg-background">
+      <div className="container mx-auto max-w-6xl">
         <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary via-secondary to-primary/90 p-12 md:p-20 shadow-2xl">
           {/* Animated background elements */}
           <div className="absolute inset-0 opacity-10">
@@ -31,27 +31,24 @@ const CTASection = () => {
               <span className="text-lg font-bold text-white">Limited Early Access</span>
             </div>
 
-            <h2 className="text-4xl md:text-6xl font-bold text-white leading-tight">
-              Join the Future of
-              <br />
-              Dental Lab Workflow
+            <h2 className="text-3xl md:text-5xl font-bold text-white leading-tight">
+              Join the Future of Dental Lab Workflow
             </h2>
 
-            <p className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto leading-relaxed">
-              Dentaleem launches <span className="font-bold">Q4 2025</span> — early access spots are limited. 
-              Be among the first to transform your dental workflow.
+            <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto leading-relaxed">
+              Dentaleem launches <span className="font-bold">Q4 2025</span> — early access spots are limited.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-6">
+            <div className="flex flex-col sm:flex-row gap-5 justify-center items-center pt-8">
               <Link to="/auth">
-                <Button size="lg" className="bg-white text-primary hover:bg-white/90 shadow-2xl text-lg px-8 group">
-                  Join as a Dentist / Clinic
+                <Button size="lg" className="bg-white text-primary hover:bg-white/90 shadow-2xl px-10 h-14 group">
+                  Join as a Dentist
                   <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
               <Link to="/lab/registration">
-                <Button size="lg" variant="outline" className="border-white/50 text-white hover:bg-white/10 backdrop-blur-sm text-lg px-8">
-                  Join as a Dental Lab
+                <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white/10 backdrop-blur-sm px-10 h-14">
+                  Join as a Lab
                 </Button>
               </Link>
             </div>

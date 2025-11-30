@@ -50,21 +50,18 @@ const PricingTeaser = () => {
   ];
 
   return (
-    <section className="py-20 px-6 bg-background">
-      <div className="container mx-auto">
-        <div className="text-center space-y-6 mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-foreground">
-            Pricing Built for Your Business
+    <section id="pricing" className="py-24 px-6 bg-background">
+      <div className="container mx-auto max-w-6xl">
+        <div className="text-center space-y-8 mb-20">
+          <h2 className="text-3xl md:text-5xl font-bold text-foreground">
+            Simple Pricing
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
             Transparent pricing for dentists and labs
-          </p>
-          <p className="text-sm text-muted-foreground">
-            Note: Final pricing details coming soon
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-16">
           {/* For Dentists */}
           <div className="space-y-8">
             <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary/10 border border-primary/20">

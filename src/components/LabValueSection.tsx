@@ -27,18 +27,16 @@ const LabValueSection = () => {
   ];
 
   return (
-    <section className="py-20 px-6 bg-background">
-      <div className="container mx-auto">
-        <div className="text-center space-y-6 mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-foreground">
-            Labs increase revenue, decrease remakes,
-            <br />
-            and <span className="text-primary">scale regionally</span>
+    <section id="lab-value" className="py-24 px-6 bg-background">
+      <div className="container mx-auto max-w-6xl">
+        <div className="text-center space-y-8 mb-20">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-tight">
+            Labs increase revenue, decrease remakes
           </h2>
         </div>
 
         {/* Big Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
           <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary to-primary/80 p-8 text-center shadow-2xl">
             <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
             <TrendingUp className="h-12 w-12 text-white mx-auto mb-4" />
@@ -68,7 +66,7 @@ const LabValueSection = () => {
         </div>
 
         {/* Benefits Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {benefits.map((benefit, index) => (
             <div
               key={index}

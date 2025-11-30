@@ -1,25 +1,25 @@
 const Footer = () => {
   return (
-    <footer className="py-12 px-6 border-t border-border bg-card">
-      <div className="container mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-          <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <div className="flex items-center gap-1">
-                <div className="w-2 h-2 rounded-full bg-primary"></div>
-                <div className="w-2 h-2 rounded-full bg-secondary"></div>
-                <div className="w-2 h-2 rounded-full bg-primary"></div>
+    <footer id="footer" className="py-16 px-6 border-t border-border bg-card">
+      <div className="container mx-auto max-w-6xl">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+          <div className="space-y-6">
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-1.5">
+                <div className="w-2.5 h-2.5 rounded-full bg-primary"></div>
+                <div className="w-2.5 h-2.5 rounded-full bg-secondary"></div>
+                <div className="w-2.5 h-2.5 rounded-full bg-primary"></div>
               </div>
-              <span className="text-lg font-bold text-foreground">DENTALEEM</span>
+              <span className="text-xl font-bold text-foreground">DENTALEEM</span>
             </div>
-            <p className="text-sm text-muted-foreground">
-              Dental End-to-End Marketplace connecting verified labs with dental practices
+            <p className="text-base text-muted-foreground leading-relaxed max-w-xs">
+              Connecting dentists and labs with transparency, speed, and precision.
             </p>
           </div>
 
           <div>
-            <h4 className="font-semibold text-foreground mb-4">Platform</h4>
-            <ul className="space-y-2 text-sm text-muted-foreground">
+            <h4 className="font-bold text-foreground mb-6">Platform</h4>
+            <ul className="space-y-3 text-sm text-muted-foreground">
               <li><a href="#" className="hover:text-foreground transition-colors">Marketplace</a></li>
               <li><a href="#" className="hover:text-foreground transition-colors">For Dentists</a></li>
               <li><a href="#" className="hover:text-foreground transition-colors">For Labs</a></li>
@@ -28,8 +28,8 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="font-semibold text-foreground mb-4">Resources</h4>
-            <ul className="space-y-2 text-sm text-muted-foreground">
+            <h4 className="font-bold text-foreground mb-6">Resources</h4>
+            <ul className="space-y-3 text-sm text-muted-foreground">
               <li><a href="#" className="hover:text-foreground transition-colors">Documentation</a></li>
               <li><a href="#" className="hover:text-foreground transition-colors">Help Center</a></li>
               <li><a href="#" className="hover:text-foreground transition-colors">Certification</a></li>
@@ -38,8 +38,8 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="font-semibold text-foreground mb-4">Company</h4>
-            <ul className="space-y-2 text-sm text-muted-foreground">
+            <h4 className="font-bold text-foreground mb-6">Company</h4>
+            <ul className="space-y-3 text-sm text-muted-foreground">
               <li><a href="#" className="hover:text-foreground transition-colors">About Us</a></li>
               <li><a href="#" className="hover:text-foreground transition-colors">Contact</a></li>
               <li><a href="#" className="hover:text-foreground transition-colors">Privacy Policy</a></li>
@@ -48,7 +48,7 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="pt-12 border-t border-border flex flex-col md:flex-row justify-between items-center gap-6">
           <p className="text-sm text-muted-foreground">
             © 2025 DENTALEEM. All rights reserved.
           </p>

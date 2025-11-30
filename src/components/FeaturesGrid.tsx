@@ -30,18 +30,18 @@ const FeaturesGrid = () => {
   ];
 
   return (
-    <section className="py-20 px-6 bg-background">
-      <div className="container mx-auto">
-        <div className="text-center space-y-6 mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-foreground">
-            Powerful Features Built for Dental Professionals
+    <section id="features" className="py-24 px-6 bg-background">
+      <div className="container mx-auto max-w-6xl">
+        <div className="text-center space-y-8 mb-20">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-tight">
+            Powerful Features
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Everything you need to manage dental cases from start to finish
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+            Everything you need to manage dental cases
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {features.map((feature, index) => (
             <div
               key={index}

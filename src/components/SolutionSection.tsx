@@ -51,20 +51,18 @@ const SolutionSection = () => {
   ];
 
   return (
-    <section className="py-20 px-6 bg-muted/30">
-      <div className="container mx-auto">
-        <div className="text-center space-y-6 mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-foreground">
+    <section id="solution" className="py-24 px-6 bg-muted/30">
+      <div className="container mx-auto max-w-6xl">
+        <div className="text-center space-y-8 mb-20">
+          <h2 className="text-3xl md:text-5xl font-bold text-foreground leading-tight">
             One platform. <span className="text-primary">Zero chaos.</span>
-            <br />
-            Maximum profitability.
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Dentaleem's end-to-end solution connects every stakeholder in the dental workflow
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+            Complete workflow solution for dental professionals
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
           {solutions.map((solution, index) => (
             <div
               key={index}

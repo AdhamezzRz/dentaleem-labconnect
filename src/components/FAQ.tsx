@@ -42,19 +42,19 @@ const FAQ = () => {
   ];
 
   return (
-    <section className="py-20 px-6 bg-muted/30">
-      <div className="container mx-auto">
-        <div className="text-center space-y-6 mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-foreground">
+    <section id="faq" className="py-24 px-6 bg-muted/30">
+      <div className="container mx-auto max-w-6xl">
+        <div className="text-center space-y-8 mb-20">
+          <h2 className="text-3xl md:text-5xl font-bold text-foreground">
             Frequently Asked Questions
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
             Everything you need to know about Dentaleem
           </p>
         </div>
 
         <div className="max-w-4xl mx-auto">
-          <Accordion type="single" collapsible className="space-y-4">
+          <Accordion type="single" collapsible className="space-y-6">
             {faqs.map((faq, index) => (
               <AccordionItem
                 key={index}
