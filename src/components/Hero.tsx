@@ -14,7 +14,7 @@ const Hero = () => {
   }, []);
 
   return (
-    <section className="relative pt-40 pb-28 px-6 overflow-hidden bg-gradient-to-b from-background via-accent/10 to-background">
+    <section id="home" className="relative pt-40 pb-32 px-6 overflow-hidden bg-gradient-to-b from-background via-accent/10 to-background">
       {/* Subtle background elements */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-32 left-20 w-96 h-96 bg-primary rounded-full blur-3xl"></div>
@@ -48,10 +48,8 @@ const Hero = () => {
           </div>
 
           {/* Main headline */}
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-primary leading-[1.1] tracking-tight">
-            The Future of Dental Lab
-            <br />
-            Workflow Starts Here.
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-primary leading-[1.15] tracking-tight px-4">
+            The Future of Dental Lab Workflow Starts Here.
           </h1>
 
           {/* Tagline badge */}
@@ -65,8 +63,8 @@ const Hero = () => {
           </div>
 
           {/* Subtitle */}
-          <p className="text-xl md:text-2xl lg:text-3xl text-muted-foreground max-w-4xl mx-auto leading-relaxed font-light">
-            One platform for dentists and labs to order, track, design, manage, and deliver dental restorations with <span className="font-bold text-foreground">zero miscommunication</span> and <span className="font-bold text-foreground">zero wasted time.</span>
+          <p className="text-lg md:text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed px-4">
+            Connect dentists and labs with <span className="font-semibold text-foreground">zero miscommunication</span> and <span className="font-semibold text-foreground">complete transparency.</span>
           </p>
 
           {/* CTAs */}
@@ -92,9 +90,9 @@ const Hero = () => {
           </div>
 
           {/* Animated workflow preview */}
-          <div className="mt-20 relative">
-            <div className="bg-card/50 backdrop-blur-sm rounded-3xl border border-border/50 p-10 shadow-2xl hover:shadow-3xl transition-shadow">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="mt-24 relative max-w-5xl mx-auto">
+            <div className="bg-card/50 backdrop-blur-sm rounded-3xl border border-border/50 p-8 md:p-12 shadow-2xl hover:shadow-3xl transition-shadow">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
                 <div className="text-center space-y-4 animate-fade-in group">
                   <div className="w-20 h-20 mx-auto bg-primary/10 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
                     <svg className="w-10 h-10 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">

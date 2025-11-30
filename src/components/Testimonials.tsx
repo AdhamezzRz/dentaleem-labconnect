@@ -59,18 +59,18 @@ const Testimonials = () => {
   ];
 
   return (
-    <section className="py-20 px-6 bg-muted/30">
-      <div className="container mx-auto">
-        <div className="text-center space-y-6 mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-foreground">
-            Trusted by Dentists and Labs
+    <section id="testimonials" className="py-24 px-6 bg-muted/30">
+      <div className="container mx-auto max-w-6xl">
+        <div className="text-center space-y-8 mb-20">
+          <h2 className="text-3xl md:text-5xl font-bold text-foreground">
+            Trusted by Professionals
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Real feedback from professionals transforming their workflow
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+            Real feedback from dentists and labs
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {testimonials.map((testimonial, index) => (
             <div
               key={index}

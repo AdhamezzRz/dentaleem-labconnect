@@ -34,18 +34,18 @@ const MarketplacePreview = () => {
   ];
 
   return (
-    <section className="py-20 px-6 bg-muted/30">
-      <div className="container mx-auto">
-        <div className="text-center space-y-6 mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-foreground">
+    <section id="marketplace" className="py-24 px-6 bg-muted/30">
+      <div className="container mx-auto max-w-6xl">
+        <div className="text-center space-y-8 mb-20">
+          <h2 className="text-3xl md:text-5xl font-bold text-foreground">
             Verified Marketplace
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Choose from certified labs with transparent ratings, turnaround times, and pricing
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+            Choose from certified labs with transparent ratings
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
           {labs.map((lab, index) => (
             <div
               key={index}

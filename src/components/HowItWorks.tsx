@@ -20,23 +20,23 @@ const HowItWorks = () => {
   ];
 
   return (
-    <section className="py-20 px-6 bg-background">
-      <div className="container mx-auto">
-        <div className="text-center space-y-6 mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-foreground">
+    <section id="how-it-works" className="py-24 px-6 bg-background">
+      <div className="container mx-auto max-w-6xl">
+        <div className="text-center space-y-8 mb-20">
+          <h2 className="text-3xl md:text-5xl font-bold text-foreground">
             How Dentaleem Works
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
             Seamless workflows for dentists and labs
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
           {/* Dentist Flow */}
-          <div className="space-y-6">
+          <div id="for-dentists" className="space-y-8">
             <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary/10 border border-primary/20">
               <div className="w-3 h-3 rounded-full bg-primary animate-pulse"></div>
-              <h3 className="text-2xl font-bold text-foreground">For Dentists</h3>
+              <h3 className="text-xl md:text-2xl font-bold text-foreground">For Dentists</h3>
             </div>
 
             <div className="space-y-4">
@@ -62,10 +62,10 @@ const HowItWorks = () => {
           </div>
 
           {/* Lab Flow */}
-          <div className="space-y-6">
+          <div id="for-labs" className="space-y-8">
             <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-secondary/10 border border-secondary/20">
               <div className="w-3 h-3 rounded-full bg-secondary animate-pulse"></div>
-              <h3 className="text-2xl font-bold text-foreground">For Labs</h3>
+              <h3 className="text-xl md:text-2xl font-bold text-foreground">For Labs</h3>
             </div>
 
             <div className="space-y-4">
