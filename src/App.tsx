@@ -17,6 +17,9 @@ import Payments from "./pages/Payments";
 import Analytics from "./pages/Analytics";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
+import LabLanding from "./pages/lab/LabLanding";
+import LabBenefits from "./pages/lab/LabBenefits";
+import LabPreRegistration from "./pages/lab/LabPreRegistration";
 import LabDashboard from "./pages/lab/LabDashboard";
 import LabProductionBoard from "./pages/lab/LabProductionBoard";
 import LabCaseDetail from "./pages/lab/LabCaseDetail";
@@ -28,6 +31,7 @@ import LabRegistration from "./pages/lab/LabRegistration";
 import LabOnboarding from "./pages/lab/LabOnboarding";
 import LabMessages from "./pages/lab/LabMessages";
 import LabSettings from "./pages/lab/LabSettings";
+import LabSupport from "./pages/lab/LabSupport";
 
 const queryClient = new QueryClient();
 
@@ -52,6 +56,9 @@ const App = () => (
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/settings" element={<Settings />} />
             {/* Lab Routes */}
+            <Route path="/lab/landing" element={<LabLanding />} />
+            <Route path="/lab/benefits" element={<LabBenefits />} />
+            <Route path="/lab/pre-registration" element={<LabPreRegistration />} />
             <Route path="/lab/register" element={<LabRegistration />} />
             <Route path="/lab/onboarding" element={<LabOnboarding />} />
             <Route path="/lab/dashboard" element={<LabDashboard />} />
@@ -63,6 +70,7 @@ const App = () => (
             <Route path="/lab/staff" element={<LabStaff />} />
             <Route path="/lab/messages" element={<LabMessages />} />
             <Route path="/lab/settings" element={<LabSettings />} />
+            <Route path="/lab/support" element={<LabSupport />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
