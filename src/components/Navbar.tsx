@@ -85,6 +85,11 @@ const Navbar = () => {
             <Globe className="h-4 w-4 text-primary" />
             <span className="text-sm font-medium text-foreground">{language}</span>
           </button>
+          <Link to="/lab/landing">
+            <Button variant="ghost" size="sm" className="text-foreground hover:text-primary">
+              Join as Lab
+            </Button>
+          </Link>
           <Link to="/auth">
             <Button variant="ghost" size="sm" className="text-foreground hover:text-primary">
               Sign In
@@ -157,7 +162,7 @@ const Navbar = () => {
             >
               Pricing
             </a>
-            <div className="flex items-center gap-3 pt-4 border-t border-border/50">
+            <div className="flex flex-col gap-3 pt-4 border-t border-border/50">
               <button 
                 onClick={toggleLanguage}
                 className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-border"
@@ -165,12 +170,17 @@ const Navbar = () => {
                 <Globe className="h-4 w-4 text-primary" />
                 <span className="text-sm font-medium">{language}</span>
               </button>
-              <Link to="/auth" className="flex-1">
+              <Link to="/lab/landing">
+                <Button variant="ghost" size="sm" className="w-full">
+                  Join as Lab
+                </Button>
+              </Link>
+              <Link to="/auth">
                 <Button variant="ghost" size="sm" className="w-full">
                   Sign In
                 </Button>
               </Link>
-              <Link to="/auth" className="flex-1">
+              <Link to="/auth">
                 <Button size="sm" className="w-full bg-accent text-foreground hover:bg-accent/90">
                   Get Started
                 </Button>
