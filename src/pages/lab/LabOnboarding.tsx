@@ -412,7 +412,16 @@ const LabOnboarding = () => {
                 {[1, 2].map((i) => (
                   <div key={i} className="grid grid-cols-3 gap-3 p-4 rounded-lg border">
                     <Input placeholder="Staff Name" />
-                    <Input placeholder="Role (Designer, QC...)" />
+                    <Select>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Role" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {staffRoles.map((role) => (
+                          <SelectItem key={role} value={role}>{role}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                     <Input placeholder="Email" type="email" />
                   </div>
                 ))}
