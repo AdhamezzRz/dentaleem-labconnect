@@ -178,7 +178,7 @@ const LabOnboarding = () => {
                         if (checked) {
                           setOnboardingData({
                             ...onboardingData,
-                            materials: { ...onboardingData.materials, [material]: 5 },
+                            materials: { ...onboardingData.materials, [material]: 7 },
                           });
                         } else {
                           const { [material]: _, ...rest } = onboardingData.materials;
@@ -188,26 +188,34 @@ const LabOnboarding = () => {
                     />
                   </div>
                   {onboardingData.materials[material] !== undefined && (
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-muted-foreground">Turnaround Time</span>
-                        <span className="font-medium text-foreground">
-                          {onboardingData.materials[material]} days
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-muted-foreground">Full Arch Turnaround</span>
+                          <span className="font-medium text-foreground">
+                            {onboardingData.materials[material]} days
+                          </span>
+                        </div>
+                        <Slider
+                          value={[onboardingData.materials[material]]}
+                          onValueChange={([value]) =>
+                            setOnboardingData({
+                              ...onboardingData,
+                              materials: { ...onboardingData.materials, [material]: value },
+                            })
+                          }
+                          min={2}
+                          max={21}
+                          step={1}
+                          className="w-full"
+                        />
+                      </div>
+                      <div className="flex items-center justify-between text-sm bg-muted/50 rounded-md px-3 py-2">
+                        <span className="text-muted-foreground">Est. Single Unit</span>
+                        <span className="font-medium text-primary">
+                          ~{Math.max(1, Math.round(onboardingData.materials[material] * 0.4))} days
                         </span>
                       </div>
-                      <Slider
-                        value={[onboardingData.materials[material]]}
-                        onValueChange={([value]) =>
-                          setOnboardingData({
-                            ...onboardingData,
-                            materials: { ...onboardingData.materials, [material]: value },
-                          })
-                        }
-                        min={1}
-                        max={14}
-                        step={1}
-                        className="w-full"
-                      />
                     </div>
                   )}
                 </div>
