@@ -62,11 +62,22 @@ const LabOnboarding = () => {
   ];
 
   const restorationTypes = [
-    { name: "Crown", defaultPrice: "900", defaultDays: "4-5" },
-    { name: "Veneer", defaultPrice: "1200", defaultDays: "5-6" },
-    { name: "Implant Crown", defaultPrice: "1500", defaultDays: "6-7" },
-    { name: "PMMA Try-In", defaultPrice: "400", defaultDays: "2-3" },
-    { name: "Night Guard", defaultPrice: "600", defaultDays: "3-4" },
+    { name: "Crown", defaultPrice: "900", defaultDays: "4-5", subTypes: ["Full Crown", "Inlay", "Onlay", "3/4 Crown"] },
+    { name: "Veneer", defaultPrice: "1200", defaultDays: "5-6", subTypes: ["Porcelain Veneer", "Composite Veneer", "Lumineers"] },
+    { name: "Implant Crown", defaultPrice: "1500", defaultDays: "6-7", subTypes: ["Screw-Retained", "Cement-Retained", "Custom Abutment"] },
+    { name: "PMMA Try-In", defaultPrice: "400", defaultDays: "2-3", subTypes: ["Provisional Crown", "Provisional Bridge", "Diagnostic Wax-Up"] },
+    { name: "Night Guard", defaultPrice: "600", defaultDays: "3-4", subTypes: ["Hard Splint", "Soft Splint", "Dual Laminate"] },
+  ];
+
+  const staffRoles = [
+    "Lab Manager",
+    "CAD Designer",
+    "Ceramist",
+    "Admin",
+    "Quality Control",
+    "Milling Technician",
+    "3D Printing Operator",
+    "Courier Manager",
   ];
 
   const handleNext = () => {
