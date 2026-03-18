@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { CheckCircle2, ArrowRight, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const LabOnboarding = () => {
   const navigate = useNavigate();

@@ -258,11 +258,9 @@ const LabBenefits = () => {
               ))}
             </div>
 
-            <Button size="lg" className="mt-8" asChild>
-              <Link to="/lab/pre-registration">
-                Apply for Gold Certification
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
+            <Button size="lg" className="mt-8" disabled>
+              Apply for Gold Certification
+              <Badge variant="secondary" className="ml-2 text-xs">Coming Soon</Badge>
             </Button>
           </div>
         </div>
