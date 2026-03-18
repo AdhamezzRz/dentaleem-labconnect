@@ -353,26 +353,44 @@ const LabOnboarding = () => {
                 Set baseline pricing per restoration type
               </p>
               {restorationTypes.map((resto) => (
-                <div key={resto.name} className="grid grid-cols-3 gap-4 items-end p-4 rounded-lg border">
-                  <div>
-                    <Label className="text-xs">Restoration Type</Label>
-                    <p className="font-medium text-foreground mt-1">{resto.name}</p>
+                <div key={resto.name} className="p-4 rounded-lg border space-y-3">
+                  <div className="grid grid-cols-3 gap-4 items-end">
+                    <div>
+                      <Label className="text-xs">Restoration Type</Label>
+                      <Input
+                        defaultValue={resto.name}
+                        className="mt-1 font-medium"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs">Turnaround (days)</Label>
+                      <Input
+                        defaultValue={resto.defaultDays}
+                        placeholder="4-5"
+                        className="mt-1"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs">Price (EGP)</Label>
+                      <Input
+                        defaultValue={resto.defaultPrice}
+                        placeholder="900"
+                        className="mt-1"
+                      />
+                    </div>
                   </div>
                   <div>
-                    <Label className="text-xs">Turnaround (days)</Label>
-                    <Input
-                      defaultValue={resto.defaultDays}
-                      placeholder="4-5"
-                      className="mt-1"
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-xs">Price (EGP)</Label>
-                    <Input
-                      defaultValue={resto.defaultPrice}
-                      placeholder="900"
-                      className="mt-1"
-                    />
+                    <Label className="text-xs text-muted-foreground">Sub-Type</Label>
+                    <Select>
+                      <SelectTrigger className="mt-1">
+                        <SelectValue placeholder="Select sub-type..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {resto.subTypes.map((sub) => (
+                          <SelectItem key={sub} value={sub}>{sub}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
               ))}
