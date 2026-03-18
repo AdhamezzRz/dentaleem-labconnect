@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { ArrowRight, TrendingUp, Workflow, DollarSign, Globe, CheckCircle2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
@@ -258,11 +259,9 @@ const LabBenefits = () => {
               ))}
             </div>
 
-            <Button size="lg" className="mt-8" asChild>
-              <Link to="/lab/pre-registration">
-                Apply for Gold Certification
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
+            <Button size="lg" className="mt-8" disabled>
+              Apply for Gold Certification
+              <Badge variant="secondary" className="ml-2 text-xs">Coming Soon</Badge>
             </Button>
           </div>
         </div>

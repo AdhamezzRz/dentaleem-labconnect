@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { CheckCircle2, ArrowRight, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const LabOnboarding = () => {
   const navigate = useNavigate();
@@ -62,11 +63,22 @@ const LabOnboarding = () => {
   ];
 
   const restorationTypes = [
-    { name: "Crown", defaultPrice: "900", defaultDays: "4-5" },
-    { name: "Veneer", defaultPrice: "1200", defaultDays: "5-6" },
-    { name: "Implant Crown", defaultPrice: "1500", defaultDays: "6-7" },
-    { name: "PMMA Try-In", defaultPrice: "400", defaultDays: "2-3" },
-    { name: "Night Guard", defaultPrice: "600", defaultDays: "3-4" },
+    { name: "Crown", defaultPrice: "900", defaultDays: "4-5", subTypes: ["Full Crown", "Inlay", "Onlay", "3/4 Crown"] },
+    { name: "Veneer", defaultPrice: "1200", defaultDays: "5-6", subTypes: ["Porcelain Veneer", "Composite Veneer", "Lumineers"] },
+    { name: "Implant Crown", defaultPrice: "1500", defaultDays: "6-7", subTypes: ["Screw-Retained", "Cement-Retained", "Custom Abutment"] },
+    { name: "PMMA Try-In", defaultPrice: "400", defaultDays: "2-3", subTypes: ["Provisional Crown", "Provisional Bridge", "Diagnostic Wax-Up"] },
+    { name: "Night Guard", defaultPrice: "600", defaultDays: "3-4", subTypes: ["Hard Splint", "Soft Splint", "Dual Laminate"] },
+  ];
+
+  const staffRoles = [
+    "Lab Manager",
+    "CAD Designer",
+    "Ceramist",
+    "Admin",
+    "Quality Control",
+    "Milling Technician",
+    "3D Printing Operator",
+    "Courier Manager",
   ];
 
   const handleNext = () => {
@@ -178,7 +190,7 @@ const LabOnboarding = () => {
                         if (checked) {
                           setOnboardingData({
                             ...onboardingData,
-                            materials: { ...onboardingData.materials, [material]: 5 },
+                            materials: { ...onboardingData.materials, [material]: 7 },
                           });
                         } else {
                           const { [material]: _, ...rest } = onboardingData.materials;
@@ -188,26 +200,34 @@ const LabOnboarding = () => {
                     />
                   </div>
                   {onboardingData.materials[material] !== undefined && (
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-muted-foreground">Turnaround Time</span>
-                        <span className="font-medium text-foreground">
-                          {onboardingData.materials[material]} days
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-muted-foreground">Full Arch Turnaround</span>
+                          <span className="font-medium text-foreground">
+                            {onboardingData.materials[material]} days
+                          </span>
+                        </div>
+                        <Slider
+                          value={[onboardingData.materials[material]]}
+                          onValueChange={([value]) =>
+                            setOnboardingData({
+                              ...onboardingData,
+                              materials: { ...onboardingData.materials, [material]: value },
+                            })
+                          }
+                          min={2}
+                          max={21}
+                          step={1}
+                          className="w-full"
+                        />
+                      </div>
+                      <div className="flex items-center justify-between text-sm bg-muted/50 rounded-md px-3 py-2">
+                        <span className="text-muted-foreground">Est. Single Unit</span>
+                        <span className="font-medium text-primary">
+                          ~{Math.max(1, Math.round(onboardingData.materials[material] * 0.4))} days
                         </span>
                       </div>
-                      <Slider
-                        value={[onboardingData.materials[material]]}
-                        onValueChange={([value]) =>
-                          setOnboardingData({
-                            ...onboardingData,
-                            materials: { ...onboardingData.materials, [material]: value },
-                          })
-                        }
-                        min={1}
-                        max={14}
-                        step={1}
-                        className="w-full"
-                      />
                     </div>
                   )}
                 </div>
@@ -334,26 +354,44 @@ const LabOnboarding = () => {
                 Set baseline pricing per restoration type
               </p>
               {restorationTypes.map((resto) => (
-                <div key={resto.name} className="grid grid-cols-3 gap-4 items-end p-4 rounded-lg border">
-                  <div>
-                    <Label className="text-xs">Restoration Type</Label>
-                    <p className="font-medium text-foreground mt-1">{resto.name}</p>
+                <div key={resto.name} className="p-4 rounded-lg border space-y-3">
+                  <div className="grid grid-cols-3 gap-4 items-end">
+                    <div>
+                      <Label className="text-xs">Restoration Type</Label>
+                      <Input
+                        defaultValue={resto.name}
+                        className="mt-1 font-medium"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs">Turnaround (days)</Label>
+                      <Input
+                        defaultValue={resto.defaultDays}
+                        placeholder="4-5"
+                        className="mt-1"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs">Price (EGP)</Label>
+                      <Input
+                        defaultValue={resto.defaultPrice}
+                        placeholder="900"
+                        className="mt-1"
+                      />
+                    </div>
                   </div>
                   <div>
-                    <Label className="text-xs">Turnaround (days)</Label>
-                    <Input
-                      defaultValue={resto.defaultDays}
-                      placeholder="4-5"
-                      className="mt-1"
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-xs">Price (EGP)</Label>
-                    <Input
-                      defaultValue={resto.defaultPrice}
-                      placeholder="900"
-                      className="mt-1"
-                    />
+                    <Label className="text-xs text-muted-foreground">Sub-Type</Label>
+                    <Select>
+                      <SelectTrigger className="mt-1">
+                        <SelectValue placeholder="Select sub-type..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {resto.subTypes.map((sub) => (
+                          <SelectItem key={sub} value={sub}>{sub}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
               ))}
@@ -375,7 +413,16 @@ const LabOnboarding = () => {
                 {[1, 2].map((i) => (
                   <div key={i} className="grid grid-cols-3 gap-3 p-4 rounded-lg border">
                     <Input placeholder="Staff Name" />
-                    <Input placeholder="Role (Designer, QC...)" />
+                    <Select>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Role" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {staffRoles.map((role) => (
+                          <SelectItem key={role} value={role}>{role}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                     <Input placeholder="Email" type="email" />
                   </div>
                 ))}
