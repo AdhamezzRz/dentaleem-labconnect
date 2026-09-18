@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -39,7 +39,14 @@ const Auth = () => {
   const [loading, setLoading] = useState(false);
   const [verificationPending, setVerificationPending] = useState(false);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { toast } = useToast();
+
+  const rawNext = searchParams.get("next");
+  const nextPath = rawNext && rawNext.startsWith("/") && !rawNext.startsWith("//") ? rawNext : null;
+  const postAuthRedirect = nextPath
+    ? `${window.location.origin}${nextPath}`
+    : `${window.location.origin}/`;
 
   const specialties = ["Prosthodontics", "Orthodontics", "Endodontics", "Periodontics", "Oral Surgery", "Pediatric Dentistry", "General Dentistry"];
   const materialOptions = ["Emax", "Zirconia", "PMMA", "Composite", "Gold", "Porcelain"];
@@ -51,7 +58,7 @@ const Auth = () => {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
       toast({ title: "Success!", description: "Logged in successfully" });
-      navigate("/dashboard");
+      navigate(nextPath ?? "/dashboard");
     } catch (error: any) {
       toast({ title: "Error", description: error.message, variant: "destructive" });
     } finally {
@@ -95,7 +102,7 @@ const Auth = () => {
       const { data, error } = await supabase.auth.signUp({
         email, password,
         options: { 
-          emailRedirectTo: `${window.location.origin}/`, 
+          emailRedirectTo: postAuthRedirect, 
           data: { full_name: fullName, clinic_name: clinicName, phone, birth_date: birthDate, license_number: licenseNumber } 
         }
       });
@@ -146,7 +153,7 @@ const Auth = () => {
       const { data, error } = await supabase.auth.signUp({
         email, password,
         options: { 
-          emailRedirectTo: `${window.location.origin}/`, 
+          emailRedirectTo: postAuthRedirect, 
           data: { 
             clinic_name: clinicName, 
             owner_name: fullName, 
