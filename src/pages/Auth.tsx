@@ -39,7 +39,14 @@ const Auth = () => {
   const [loading, setLoading] = useState(false);
   const [verificationPending, setVerificationPending] = useState(false);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { toast } = useToast();
+
+  const rawNext = searchParams.get("next");
+  const nextPath = rawNext && rawNext.startsWith("/") && !rawNext.startsWith("//") ? rawNext : null;
+  const postAuthRedirect = nextPath
+    ? `${window.location.origin}${nextPath}`
+    : `${window.location.origin}/`;
 
   const specialties = ["Prosthodontics", "Orthodontics", "Endodontics", "Periodontics", "Oral Surgery", "Pediatric Dentistry", "General Dentistry"];
   const materialOptions = ["Emax", "Zirconia", "PMMA", "Composite", "Gold", "Porcelain"];
