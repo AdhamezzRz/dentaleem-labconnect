@@ -102,7 +102,7 @@ const Auth = () => {
       const { data, error } = await supabase.auth.signUp({
         email, password,
         options: { 
-          emailRedirectTo: `${window.location.origin}/`, 
+          emailRedirectTo: postAuthRedirect, 
           data: { full_name: fullName, clinic_name: clinicName, phone, birth_date: birthDate, license_number: licenseNumber } 
         }
       });
