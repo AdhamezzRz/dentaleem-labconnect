@@ -17,6 +17,7 @@ import Payments from "./pages/Payments";
 import Analytics from "./pages/Analytics";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
+import OAuthConsent from "./pages/OAuthConsent";
 import LabLanding from "./pages/lab/LabLanding";
 import LabBenefits from "./pages/lab/LabBenefits";
 import LabPreRegistration from "./pages/lab/LabPreRegistration";
