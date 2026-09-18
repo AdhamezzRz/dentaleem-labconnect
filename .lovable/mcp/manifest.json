@@ -1,0 +1,250 @@
+{
+  "version": 1,
+  "sdk_version": "2.2.1",
+  "path": "/functions/v1/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://myupobattupvicqrpmgn.supabase.co/auth/v1",
+    "accepted_audiences": [
+      "authenticated"
+    ]
+  },
+  "mcp": {
+    "server": {
+      "name": "dentaleem-labconnect",
+      "version": "0.1.0",
+      "title": "dentaleem-labconnect"
+    },
+    "tools": [
+      {
+        "name": "list_cases",
+        "title": "List cases",
+        "description": "List dental cases visible to the signed-in user, optionally filtered by status, newest first.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "draft",
+                "pending_payment",
+                "design",
+                "production",
+                "delivery",
+                "final_production",
+                "completed",
+                "remake"
+              ],
+              "description": "Filter by case status."
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50,
+              "default": 20,
+              "description": "Maximum cases to return."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_case",
+        "title": "Get case details",
+        "description": "Get one dental case with its recent status updates and production stages, by case ID.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "case_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The case ID."
+            }
+          },
+          "required": [
+            "case_id"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "create_case",
+        "title": "Create case",
+        "description": "Create a new draft dental case for the signed-in dentist, with patient initials, case type and optional details.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "patient_initials": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 10,
+              "description": "Patient initials, e.g. 'A.M.'"
+            },
+            "case_type": {
+              "type": "string",
+              "enum": [
+                "crown",
+                "veneer",
+                "implant",
+                "bridge",
+                "denture",
+                "aligner",
+                "other"
+              ],
+              "description": "Type of restoration."
+            },
+            "material": {
+              "type": "string",
+              "description": "Material, e.g. Zirconia, E-max."
+            },
+            "tooth_number": {
+              "type": "string",
+              "description": "Tooth number or range."
+            },
+            "due_date": {
+              "type": "string",
+              "format": "date",
+              "description": "Requested due date (YYYY-MM-DD)."
+            },
+            "lab_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Lab to assign the case to."
+            },
+            "notes": {
+              "type": "string",
+              "maxLength": 2000,
+              "description": "Clinical notes for the lab."
+            }
+          },
+          "required": [
+            "patient_initials",
+            "case_type"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "add_case_update",
+        "title": "Add case update",
+        "description": "Post a status update with an optional message to a case the signed-in user can access.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "case_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The case ID."
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "draft",
+                "pending_payment",
+                "design",
+                "production",
+                "delivery",
+                "final_production",
+                "completed",
+                "remake"
+              ],
+              "description": "Status reported by this update."
+            },
+            "message": {
+              "type": "string",
+              "maxLength": 1000,
+              "description": "Note to show on the case timeline."
+            }
+          },
+          "required": [
+            "case_id",
+            "status"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "search_labs",
+        "title": "Search labs",
+        "description": "Search the marketplace of dental labs by name or specialty, with rating, turnaround and base price.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Text to match against the lab name."
+            },
+            "specialty": {
+              "type": "string",
+              "description": "Specialty the lab must offer, e.g. Zirconia."
+            },
+            "verified_only": {
+              "type": "boolean",
+              "default": false,
+              "description": "Only return verified labs."
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50,
+              "default": 20,
+              "description": "Maximum labs to return."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_my_profile",
+        "title": "Get my profile",
+        "description": "Get the signed-in user's Dentaleem profile: name, clinic, specialty and verification status.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
