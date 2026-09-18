@@ -58,7 +58,7 @@ const Auth = () => {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
       toast({ title: "Success!", description: "Logged in successfully" });
-      navigate("/dashboard");
+      navigate(nextPath ?? "/dashboard");
     } catch (error: any) {
       toast({ title: "Error", description: error.message, variant: "destructive" });
     } finally {
